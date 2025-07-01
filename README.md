@@ -883,10 +883,6 @@
     .category:nth-child(6) { animation-delay: 0.6s; }
     .category:nth-child(7) { animation-delay: 0.7s; }
   </style>
-
-
-
-
 </head>
 <body>
   <div class="header">
@@ -1711,14 +1707,17 @@
             <div class="payment-option">
               <input type="radio" id="payment-pix" name="payment" value="PIX" checked>
               <label for="payment-pix">PIX</label>
+              <div class="payment-dot"></div>
             </div>
             <div class="payment-option">
               <input type="radio" id="payment-cash" name="payment" value="Dinheiro">
               <label for="payment-cash">Dinheiro</label>
+              <div class="payment-dot"></div>
             </div>
             <div class="payment-option">
               <input type="radio" id="payment-card" name="payment" value="Cartão">
               <label for="payment-card">Cartão (Máquina na entrega)</label>
+              <div class="payment-dot"></div>
             </div>
           </div>
         </div>
@@ -2321,6 +2320,25 @@
       
       // Configura opção de entrega como padrão
       selectDeliveryOption(document.querySelector('.delivery-option:nth-child(3)'), 'entrega');
+      
+      // Configura o carrinho flutuante
+      const cartSection = document.querySelector('.cart-section');
+      let lastScrollPosition = window.scrollY;
+      
+      window.addEventListener('scroll', () => {
+        const currentScrollPosition = window.scrollY;
+        
+        // Esconde o carrinho quando o usuário rola para baixo
+        if (currentScrollPosition > lastScrollPosition) {
+          cartSection.classList.add('hidden');
+        } 
+        // Mostra o carrinho quando o usuário rola para cima
+        else if (currentScrollPosition < lastScrollPosition) {
+          cartSection.classList.remove('hidden');
+        }
+        
+        lastScrollPosition = currentScrollPosition;
+      });
     });
   </script>
 </body>
