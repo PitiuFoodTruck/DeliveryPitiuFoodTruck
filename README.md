@@ -182,6 +182,8 @@
       padding: 0.8rem;
       width: 100%;
       box-sizing: border-box;
+      position: relative;
+      padding-bottom: 120px; /* Espaço para o carrinho flutuante */
     }
     
     .menu-section {
@@ -196,9 +198,19 @@
       box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
       padding: 0.8rem;
       z-index: 90;
-      position: sticky;
+      position: fixed;
       bottom: 0;
+      left: 0;
+      right: 0;
       box-sizing: border-box;
+      max-height: 50vh;
+      overflow-y: auto;
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .cart-section.hidden {
+      transform: translateY(100%);
     }
     
     .category {
@@ -541,16 +553,19 @@
     .payment-options {
       margin: 0.8rem 0;
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
       width: 100%;
     }
     
     .payment-option {
       margin-bottom: 0.5rem;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      width: 100%;
+      min-width: 100px;
+      position: relative;
     }
     
     .payment-option input {
@@ -561,6 +576,25 @@
     .payment-option label {
       font-size: 0.9rem;
       word-break: break-word;
+      text-align: center;
+      margin-top: 5px;
+    }
+    
+    .payment-dot {
+      width: 10px;
+      height: 10px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .payment-option input:checked ~ .payment-dot {
+      opacity: 1;
     }
     
     .submit-order {
@@ -790,6 +824,10 @@
       .delivery-option:last-child {
         border-right: none;
       }
+      
+      .payment-options {
+        flex-wrap: nowrap;
+      }
     }
     
     /* Responsividade para desktops */
@@ -797,11 +835,13 @@
       .container {
         flex-direction: row;
         max-width: 1200px;
+        padding-bottom: 0;
       }
       
       .menu-section {
         padding-right: 1rem;
         margin-bottom: 0;
+        flex: 1;
       }
       
       .cart-section {
@@ -810,6 +850,8 @@
         height: calc(100vh - 60px);
         bottom: auto;
         max-width: 350px;
+        max-height: none;
+        transform: none !important;
       }
       
       .item-image {
@@ -841,6 +883,10 @@
     .category:nth-child(6) { animation-delay: 0.6s; }
     .category:nth-child(7) { animation-delay: 0.7s; }
   </style>
+
+
+
+
 </head>
 <body>
   <div class="header">
