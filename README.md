@@ -1,7 +1,12 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="MobileOptimized" content="width">
+  <meta name="theme-color" content="#d35400">
+  <meta name="format-detection" content="telephone=no">
   <title>Cardápio Completo - FoodTruck do Pitiu</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -211,6 +216,7 @@
       object-fit: cover;
       border-radius: 8px;
       margin-right: 1rem;
+      cursor: pointer;
     }
     
     .item-details {
@@ -281,6 +287,7 @@
       justify-content: space-between;
       padding: 0.5rem 0;
       border-bottom: 1px solid #eee;
+      position: relative;
     }
     
     .cart-item-name {
@@ -299,6 +306,39 @@
       background: none;
       border: none;
       font-size: 0.9rem;
+    }
+    
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      margin-top: 0.3rem;
+    }
+    
+    .quantity-btn {
+      background-color: #f0f0f0;
+      border: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .quantity-value {
+      margin: 0 0.5rem;
+      min-width: 20px;
+      text-align: center;
+    }
+    
+    .cart-item-notes {
+      width: 100%;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.3rem;
+      font-style: italic;
     }
     
     .cart-total {
@@ -510,6 +550,61 @@
       color: var(--primary-color);
     }
     
+    .addons-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+    
+    .addons-actions button {
+      width: 48%;
+    }
+    
+    /* Modal de Visualização do Item */
+    .item-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1002;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .item-modal-content {
+      background-color: white;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    
+    .item-modal-image {
+      max-width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .item-modal-title {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .item-modal-description {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    
     /* Opções de retirada */
     .delivery-options {
       display: flex;
@@ -605,8 +700,17 @@
         min-width: 100%;
       }
       
-      .modal-content, .addons-content {
+      .modal-content, .addons-content, .item-modal-content {
         padding: 1rem;
+      }
+      
+      .delivery-options {
+        flex-direction: column;
+      }
+      
+      .delivery-option {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
       }
     }
     
@@ -661,7 +765,7 @@
         <div class="category-header">Hambúrgueres Artesanais</div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,1" alt="Carne no Prato" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?burger,1" alt="Carne no Prato" class="item-image" onclick="openItemModal('Carne no Prato', 'Blend da casa de 180g, queijo prato e mussarela no pão brioche.', 'https://source.unsplash.com/random/300x300/?burger,1')">
           <div class="item-details">
             <h3 class="item-title">Carne no Prato - R$18</h3>
             <p class="item-description">Blend da casa de 180g, queijo prato e mussarela no pão brioche.</p>
@@ -673,7 +777,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,2" alt="Cheeseburguer" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?burger,2" alt="Cheeseburguer" class="item-image" onclick="openItemModal('Cheeseburguer', 'Blend da casa de 180g, queijo prato, mussarela e maionese da casa no pão brioche.', 'https://source.unsplash.com/random/300x300/?burger,2')">
           <div class="item-details">
             <h3 class="item-title">Cheeseburguer - R$22</h3>
             <p class="item-description">Blend da casa de 180g, queijo prato, mussarela e maionese da casa no pão brioche.</p>
@@ -685,7 +789,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,3" alt="Cheese Calabresa" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?burger,3" alt="Cheese Calabresa" class="item-image" onclick="openItemModal('Cheese Calabresa', 'Blend da casa de 180g, calabresa, queijo prato, mussarela e maionese da casa no pão brioche.', 'https://source.unsplash.com/random/300x300/?burger,3')">
           <div class="item-details">
             <h3 class="item-title">Cheese Calabresa - R$23</h3>
             <p class="item-description">Blend da casa de 180g, calabresa, queijo prato, mussarela e maionese da casa no pão brioche.</p>
@@ -697,7 +801,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,4" alt="Cheese Bacon" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?burger,4" alt="Cheese Bacon" class="item-image" onclick="openItemModal('Cheese Bacon', 'Blend da casa de 180g, bacon, queijo prato, mussarela e maionese da casa no pão brioche.', 'https://source.unsplash.com/random/300x300/?burger,4')">
           <div class="item-details">
             <h3 class="item-title">Cheese Bacon - R$26</h3>
             <p class="item-description">Blend da casa de 180g, bacon, queijo prato, mussarela e maionese da casa no pão brioche.</p>
@@ -709,7 +813,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,5" alt="Kids" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?burger,5" alt="Kids" class="item-image" onclick="openItemModal('Kids', 'Blend da casa de 90g, queijo prato, mussarela no pão brioche.', 'https://source.unsplash.com/random/300x300/?burger,5')">
           <div class="item-details">
             <h3 class="item-title">Kids - R$18</h3>
             <p class="item-description">Blend da casa de 90g, queijo prato, mussarela no pão brioche.</p>
@@ -721,7 +825,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,6" alt="Black" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?burger,6" alt="Black" class="item-image" onclick="openItemModal('Black', 'Blend da casa de 180g, anéis de cebola, bacon, calabresa, queijo prato, mussarela, barbecue e maionese da casa no pão triplo X (brioche com bacon, calabresa e parmesão).', 'https://source.unsplash.com/random/300x300/?burger,6')">
           <div class="item-details">
             <h3 class="item-title">Black - R$32</h3>
             <p class="item-description">Blend da casa de 180g, anéis de cebola, bacon, calabresa, queijo prato, mussarela, barbecue e maionese da casa no pão triplo X (brioche com bacon, calabresa e parmesão).</p>
@@ -733,7 +837,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,7" alt="Cheddar Cremoso" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?burger,7" alt="Cheddar Cremoso" class="item-image" onclick="openItemModal('Cheddar Cremoso', 'Blend da casa de 180g, bacon, cebola caramelizada e cheddar cremoso no pão australiano.', 'https://source.unsplash.com/random/300x300/?burger,7')">
           <div class="item-details">
             <h3 class="item-title">Cheddar Cremoso - R$32</h3>
             <p class="item-description">Blend da casa de 180g, bacon, cebola caramelizada e cheddar cremoso no pão australiano.</p>
@@ -745,7 +849,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,8" alt="Pitiuzinho" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?burger,8" alt="Pitiuzinho" class="item-image" onclick="openItemModal('Pitiuzinho', 'Blend da casa de 180g, bacon, cebola caramelizada, cheddar cremoso e catupiry no pão de queijo.', 'https://source.unsplash.com/random/300x300/?burger,8')">
           <div class="item-details">
             <h3 class="item-title">Pitiuzinho - R$34</h3>
             <p class="item-description">Blend da casa de 180g, bacon, cebola caramelizada, cheddar cremoso e catupiry no pão de queijo.</p>
@@ -762,7 +866,7 @@
         <div class="category-header">Pão de Queijo Recheado</div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,1" alt="Sem Recheio" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,1" alt="Sem Recheio" class="item-image" onclick="openItemModal('Pão de Queijo Sem Recheio', 'Pão de queijo tradicional sem recheio.', 'https://source.unsplash.com/random/300x300/?cheese-bread,1')">
           <div class="item-details">
             <h3 class="item-title">Sem Recheio - R$9</h3>
             <p class="item-description">Pão de queijo tradicional sem recheio.</p>
@@ -774,7 +878,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,2" alt="Frango com Catupiry" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,2" alt="Frango com Catupiry" class="item-image" onclick="openItemModal('Pão de Queijo Frango Catupiry', 'Frango desfiado com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,2')">
           <div class="item-details">
             <h3 class="item-title">Frango com Catupiry - R$18</h3>
             <p class="item-description">Frango desfiado com catupiry cremoso.</p>
@@ -786,7 +890,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,3" alt="Cheddar" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,3" alt="Cheddar" class="item-image" onclick="openItemModal('Pão de Queijo Cheddar', 'Recheio de cheddar derretido com opção de cebola.', 'https://source.unsplash.com/random/300x300/?cheese-bread,3')">
           <div class="item-details">
             <h3 class="item-title">Cheddar (com ou sem cebola) - R$17</h3>
             <p class="item-description">Recheio de cheddar derretido com opção de cebola.</p>
@@ -798,7 +902,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,4" alt="Catupiry" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,4" alt="Catupiry" class="item-image" onclick="openItemModal('Pão de Queijo Catupiry', 'Recheio de catupiry cremoso com opção de cebola.', 'https://source.unsplash.com/random/300x300/?cheese-bread,4')">
           <div class="item-details">
             <h3 class="item-title">Catupiry (com ou sem cebola) - R$17</h3>
             <p class="item-description">Recheio de catupiry cremoso com opção de cebola.</p>
@@ -810,7 +914,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,5" alt="Chester Defumado" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,5" alt="Chester Defumado" class="item-image" onclick="openItemModal('Pão de Queijo Chester Catupiry', 'Carne de chester defumada com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,5')">
           <div class="item-details">
             <h3 class="item-title">Chester Defumado com Catupiry - R$19</h3>
             <p class="item-description">Carne de chester defumada com catupiry cremoso.</p>
@@ -822,7 +926,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,6" alt="Carne Seca" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,6" alt="Carne Seca" class="item-image" onclick="openItemModal('Pão de Queijo Carne Seca Catupiry', 'Carne seca desfiada com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,6')">
           <div class="item-details">
             <h3 class="item-title">Carne Seca com Catupiry - R$20</h3>
             <p class="item-description">Carne seca desfiada com catupiry cremoso.</p>
@@ -834,7 +938,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,7" alt="Camarão" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,7" alt="Camarão" class="item-image" onclick="openItemModal('Pão de Queijo Camarão Catupiry', 'Camarão ao molho com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,7')">
           <div class="item-details">
             <h3 class="item-title">Camarão com Catupiry - R$23</h3>
             <p class="item-description">Camarão ao molho com catupiry cremoso.</p>
@@ -847,7 +951,7 @@
         
         <!-- Adicionando a parte Doce -->
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,8" alt="Doce de Leite" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,8" alt="Doce de Leite" class="item-image" onclick="openItemModal('Pão de Queijo Doce de Leite', 'Pão de queijo recheado com doce de leite cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,8')">
           <div class="item-details">
             <h3 class="item-title">Doce de Leite - R$14</h3>
             <p class="item-description">Pão de queijo recheado com doce de leite cremoso.</p>
@@ -859,7 +963,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,9" alt="Romeu e Julieta" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,9" alt="Romeu e Julieta" class="item-image" onclick="openItemModal('Pão de Queijo Romeu e Julieta', 'Pão de queijo recheado com queijo e goiabada.', 'https://source.unsplash.com/random/300x300/?cheese-bread,9')">
           <div class="item-details">
             <h3 class="item-title">Romeu e Julieta - R$15</h3>
             <p class="item-description">Pão de queijo recheado com queijo e goiabada.</p>
@@ -871,7 +975,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,10" alt="Chocolate Preto" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,10" alt="Chocolate Preto" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Preto', 'Pão de queijo recheado com chocolate preto.', 'https://source.unsplash.com/random/300x300/?cheese-bread,10')">
           <div class="item-details">
             <h3 class="item-title">Chocolate Preto - R$16</h3>
             <p class="item-description">Pão de queijo recheado com chocolate preto.</p>
@@ -883,7 +987,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,11" alt="Chocolate Branco" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,11" alt="Chocolate Branco" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Branco', 'Pão de queijo recheado com chocolate branco.', 'https://source.unsplash.com/random/300x300/?cheese-bread,11')">
           <div class="item-details">
             <h3 class="item-title">Chocolate Branco - R$16</h3>
             <p class="item-description">Pão de queijo recheado com chocolate branco.</p>
@@ -895,7 +999,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,12" alt="Chocolate Misto" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,12" alt="Chocolate Misto" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Misto', 'Pão de queijo recheado com chocolate preto e branco.', 'https://source.unsplash.com/random/300x300/?cheese-bread,12')">
           <div class="item-details">
             <h3 class="item-title">Chocolate Misto - R$16</h3>
             <p class="item-description">Pão de queijo recheado com chocolate preto e branco.</p>
@@ -907,7 +1011,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,13" alt="Nutella" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,13" alt="Nutella" class="item-image" onclick="openItemModal('Pão de Queijo Nutella', 'Pão de queijo recheado com Nutella e opção de morango.', 'https://source.unsplash.com/random/300x300/?cheese-bread,13')">
           <div class="item-details">
             <h3 class="item-title">Nutella (com ou sem morango) - R$20</h3>
             <p class="item-description">Pão de queijo recheado com Nutella e opção de morango.</p>
@@ -924,7 +1028,7 @@
         <div class="category-header">Pastelzinho</div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,1" alt="Queijo" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,1" alt="Queijo" class="item-image" onclick="openItemModal('Pastelzinho Queijo', 'Pastelzinho recheado com queijo derretido.', 'https://source.unsplash.com/random/300x300/?pastry,1')">
           <div class="item-details">
             <h3 class="item-title">Queijo - R$6</h3>
             <p class="item-description">Pastelzinho recheado com queijo derretido.</p>
@@ -936,7 +1040,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,2" alt="Cheddar" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,2" alt="Cheddar" class="item-image" onclick="openItemModal('Pastelzinho Cheddar', 'Pastelzinho recheado com cheddar derretido e opção de cebola.', 'https://source.unsplash.com/random/300x300/?pastry,2')">
           <div class="item-details">
             <h3 class="item-title">Cheddar (com ou sem cebola) - R$6</h3>
             <p class="item-description">Pastelzinho recheado com cheddar derretido e opção de cebola.</p>
@@ -948,7 +1052,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,3" alt="Catupiry" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,3" alt="Catupiry" class="item-image" onclick="openItemModal('Pastelzinho Catupiry', 'Pastelzinho recheado com catupiry cremoso e opção de cebola.', 'https://source.unsplash.com/random/300x300/?pastry,3')">
           <div class="item-details">
             <h3 class="item-title">Catupiry (com ou sem cebola) - R$6</h3>
             <p class="item-description">Pastelzinho recheado com catupiry cremoso e opção de cebola.</p>
@@ -960,7 +1064,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,4" alt="Carne Moída" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,4" alt="Carne Moída" class="item-image" onclick="openItemModal('Pastelzinho Carne Moída', 'Pastelzinho recheado com carne moída temperada.', 'https://source.unsplash.com/random/300x300/?pastry,4')">
           <div class="item-details">
             <h3 class="item-title">Carne Moída - R$7</h3>
             <p class="item-description">Pastelzinho recheado com carne moída temperada.</p>
@@ -972,7 +1076,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,5" alt="Carne Seca" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,5" alt="Carne Seca" class="item-image" onclick="openItemModal('Pastelzinho Carne Seca', 'Pastelzinho recheado com carne seca desfiada.', 'https://source.unsplash.com/random/300x300/?pastry,5')">
           <div class="item-details">
             <h3 class="item-title">Carne Seca - R$7</h3>
             <p class="item-description">Pastelzinho recheado com carne seca desfiada.</p>
@@ -984,7 +1088,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,6" alt="Camarão" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,6" alt="Camarão" class="item-image" onclick="openItemModal('Pastelzinho Camarão', 'Pastelzinho recheado com camarão ao molho.', 'https://source.unsplash.com/random/300x300/?pastry,6')">
           <div class="item-details">
             <h3 class="item-title">Camarão - R$9</h3>
             <p class="item-description">Pastelzinho recheado com camarão ao molho.</p>
@@ -996,7 +1100,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,7" alt="Aplicação de Catupiry" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,7" alt="Aplicação de Catupiry" class="item-image" onclick="openItemModal('Aplicação de Catupiry', 'Adicione catupiry cremoso ao seu pastelzinho.', 'https://source.unsplash.com/random/300x300/?pastry,7')">
           <div class="item-details">
             <h3 class="item-title">Aplicação de Catupiry - R$2</h3>
             <p class="item-description">Adicione catupiry cremoso ao seu pastelzinho.</p>
@@ -1009,7 +1113,7 @@
         
         <!-- Adicionando a parte Doce -->
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,8" alt="Doce de Leite" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,8" alt="Doce de Leite" class="item-image" onclick="openItemModal('Pastelzinho Doce de Leite', 'Pastelzinho recheado com doce de leite cremoso.', 'https://source.unsplash.com/random/300x300/?pastry,8')">
           <div class="item-details">
             <h3 class="item-title">Doce de Leite - R$6</h3>
             <p class="item-description">Pastelzinho recheado com doce de leite cremoso.</p>
@@ -1021,7 +1125,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,9" alt="Romeu e Julieta" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,9" alt="Romeu e Julieta" class="item-image" onclick="openItemModal('Pastelzinho Romeu e Julieta', 'Pastelzinho recheado com queijo e goiabada.', 'https://source.unsplash.com/random/300x300/?pastry,9')">
           <div class="item-details">
             <h3 class="item-title">Romeu e Julieta - R$6</h3>
             <p class="item-description">Pastelzinho recheado com queijo e goiabada.</p>
@@ -1033,7 +1137,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,10" alt="Chocolate Preto" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,10" alt="Chocolate Preto" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Preto', 'Pastelzinho recheado com chocolate preto.', 'https://source.unsplash.com/random/300x300/?pastry,10')">
           <div class="item-details">
             <h3 class="item-title">Chocolate Preto - R$6</h3>
             <p class="item-description">Pastelzinho recheado com chocolate preto.</p>
@@ -1045,7 +1149,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,11" alt="Chocolate Branco" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,11" alt="Chocolate Branco" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Branco', 'Pastelzinho recheado com chocolate branco.', 'https://source.unsplash.com/random/300x300/?pastry,11')">
           <div class="item-details">
             <h3 class="item-title">Chocolate Branco - R$6</h3>
             <p class="item-description">Pastelzinho recheado com chocolate branco.</p>
@@ -1057,7 +1161,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,12" alt="Chocolate Misto" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,12" alt="Chocolate Misto" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Misto', 'Pastelzinho recheado com chocolate preto e branco.', 'https://source.unsplash.com/random/300x300/?pastry,12')">
           <div class="item-details">
             <h3 class="item-title">Chocolate Misto - R$6</h3>
             <p class="item-description">Pastelzinho recheado com chocolate preto e branco.</p>
@@ -1069,7 +1173,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,13" alt="Nutella" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?pastry,13" alt="Nutella" class="item-image" onclick="openItemModal('Pastelzinho Nutella', 'Pastelzinho recheado com Nutella.', 'https://source.unsplash.com/random/300x300/?pastry,13')">
           <div class="item-details">
             <h3 class="item-title">Nutella - R$7</h3>
             <p class="item-description">Pastelzinho recheado com Nutella.</p>
@@ -1086,7 +1190,7 @@
         <div class="category-header">Petiscos</div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?snack,1" alt="Batata Canoa" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?snack,1" alt="Batata Canoa" class="item-image" onclick="openItemModal('Batata Canoa 200G', 'Batata canoa crocante (acompanha maionese da casa).', 'https://source.unsplash.com/random/300x300/?snack,1')">
           <div class="item-details">
             <h3 class="item-title">Batata Canoa 200G - R$14</h3>
             <p class="item-description">Batata canoa crocante (acompanha maionese da casa).</p>
@@ -1098,7 +1202,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?snack,2" alt="Anéis de Cebola" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?snack,2" alt="Anéis de Cebola" class="item-image" onclick="openItemModal('Anéis de Cebola 10 Und.', 'Anéis de cebola empanados (acompanha maionese da casa).', 'https://source.unsplash.com/random/300x300/?snack,2')">
           <div class="item-details">
             <h3 class="item-title">Anéis de Cebola 10 Und. - R$14</h3>
             <p class="item-description">Anéis de cebola empanados (acompanha maionese da casa).</p>
@@ -1110,7 +1214,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?snack,3" alt="Batata Canoa Especial" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?snack,3" alt="Batata Canoa Especial" class="item-image" onclick="openItemModal('Batata Canoa Especial', 'Batata canoa com cheddar ou catupiry e bacon.', 'https://source.unsplash.com/random/300x300/?snack,3')">
           <div class="item-details">
             <h3 class="item-title">Batata Canoa 200g - R$25</h3>
             <p class="item-description">Batata canoa com cheddar ou catupiry e bacon.</p>
@@ -1122,7 +1226,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?snack,4" alt="Provolone à Milanesa" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?snack,4" alt="Provolone à Milanesa" class="item-image" onclick="openItemModal('Provolone à Milanesa', 'Provolone empanado (acompanha maionese da casa).', 'https://source.unsplash.com/random/300x300/?snack,4')">
           <div class="item-details">
             <h3 class="item-title">Provolone à Milanesa - R$30</h3>
             <p class="item-description">Provolone empanado (acompanha maionese da casa).</p>
@@ -1139,7 +1243,7 @@
         <div class="category-header">Bebidas</div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?water,1" alt="Água" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?water,1" alt="Água" class="item-image" onclick="openItemModal('Água', 'Água mineral sem gás 500ml.', 'https://source.unsplash.com/random/300x300/?water,1')">
           <div class="item-details">
             <h3 class="item-title">Água - R$4</h3>
             <p class="item-description">Água mineral sem gás 500ml.</p>
@@ -1151,7 +1255,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?sparkling-water,1" alt="Água com gás" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?sparkling-water,1" alt="Água com gás" class="item-image" onclick="openItemModal('Água com gás', 'Água mineral com gás 500ml.', 'https://source.unsplash.com/random/300x300/?sparkling-water,1')">
           <div class="item-details">
             <h3 class="item-title">Água com gás - R$5</h3>
             <p class="item-description">Água mineral com gás 500ml.</p>
@@ -1163,7 +1267,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?guarana,1" alt="Guaravita" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?guarana,1" alt="Guaravita" class="item-image" onclick="openItemModal('Guaravita', 'Refrigerante Guaravita 290ml.', 'https://source.unsplash.com/random/300x300/?guarana,1')">
           <div class="item-details">
             <h3 class="item-title">Guaravita - R$4</h3>
             <p class="item-description">Refrigerante Guaravita 290ml.</p>
@@ -1175,7 +1279,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?guarana,2" alt="Guaraviton" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?guarana,2" alt="Guaraviton" class="item-image" onclick="openItemModal('Guaraviton', 'Refrigerante Guaraviton 290ml.', 'https://source.unsplash.com/random/300x300/?guarana,2')">
           <div class="item-details">
             <h3 class="item-title">Guaraviton - R$6</h3>
             <p class="item-description">Refrigerante Guaraviton 290ml.</p>
@@ -1187,7 +1291,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?mate,1" alt="Mate" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?mate,1" alt="Mate" class="item-image" onclick="openItemModal('Mate', 'Refrigerante Mate 290ml.', 'https://source.unsplash.com/random/300x300/?mate,1')">
           <div class="item-details">
             <h3 class="item-title">Mate (Natural ou Limão) - R$6</h3>
             <p class="item-description">Refrigerante Mate 290ml.</p>
@@ -1199,7 +1303,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?ice-tea,1" alt="Ice Tea" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?ice-tea,1" alt="Ice Tea" class="item-image" onclick="openItemModal('Ice Tea', 'Ice Tea 290ml.', 'https://source.unsplash.com/random/300x300/?ice-tea,1')">
           <div class="item-details">
             <h3 class="item-title">Ice Tea (Pêssego ou Limão) - R$6</h3>
             <p class="item-description">Ice Tea 290ml.</p>
@@ -1211,7 +1315,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?soda,1" alt="Refrigerante Lata" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?soda,1" alt="Refrigerante Lata" class="item-image" onclick="openItemModal('Refrigerante Lata', 'Coca-cola, Coca-cola Zero, Pepsi, Guaraná, Guaraná Zero, Sprite, Fanta Laranja, Fanta Uva, Citrus ou Água Tônica.', 'https://source.unsplash.com/random/300x300/?soda,1')">
           <div class="item-details">
             <h3 class="item-title">Refrigerante Lata - R$6</h3>
             <p class="item-description">Coca-cola, Coca-cola Zero, Pepsi, Guaraná, Guaraná Zero, Sprite, Fanta Laranja, Fanta Uva, Citrus ou Água Tônica.</p>
@@ -1223,7 +1327,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?h2o,1" alt="H2O" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?h2o,1" alt="H2O" class="item-image" onclick="openItemModal('H2O', 'H2O 500ml.', 'https://source.unsplash.com/random/300x300/?h2o,1')">
           <div class="item-details">
             <h3 class="item-title">H2O (Limão ou Limoneto) - R$7</h3>
             <p class="item-description">H2O 500ml.</p>
@@ -1235,7 +1339,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?soda,2" alt="Refrigerante 600ml" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?soda,2" alt="Refrigerante 600ml" class="item-image" onclick="openItemModal('Refrigerante 600ml', 'Coca-cola ou Coca-cola Zero 600ml.', 'https://source.unsplash.com/random/300x300/?soda,2')">
           <div class="item-details">
             <h3 class="item-title">Refrigerante 600ml - R$9</h3>
             <p class="item-description">Coca-cola ou Coca-cola Zero 600ml.</p>
@@ -1247,7 +1351,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?orange-juice,1" alt="Suco de Laranja" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?orange-juice,1" alt="Suco de Laranja" class="item-image" onclick="openItemModal('Suco de Laranja Natural', 'Suco de laranja natural fresco.', 'https://source.unsplash.com/random/300x300/?orange-juice,1')">
           <div class="item-details">
             <h3 class="item-title">Suco de Laranja Natural - R$10 (300ml) / R$25 (1L)</h3>
             <p class="item-description">Suco de laranja natural fresco.</p>
@@ -1260,7 +1364,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?coconut,1" alt="Coco Gelado" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?coconut,1" alt="Coco Gelado" class="item-image" onclick="openItemModal('Coco Gelado', 'Água de coco natural gelada.', 'https://source.unsplash.com/random/300x300/?coconut,1')">
           <div class="item-details">
             <h3 class="item-title">Coco Gelado - R$8</h3>
             <p class="item-description">Água de coco natural gelada.</p>
@@ -1277,7 +1381,7 @@
         <div class="category-header">Smoothie</div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?smoothie,1" alt="Morango" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?smoothie,1" alt="Morango" class="item-image" onclick="openItemModal('Smoothie Morango', 'Bebida cremosa de morango.', 'https://source.unsplash.com/random/300x300/?smoothie,1')">
           <div class="item-details">
             <h3 class="item-title">Morango 500ml - R$18</h3>
             <p class="item-description">Bebida cremosa de morango.</p>
@@ -1294,7 +1398,7 @@
         <div class="category-header">Cervejas</div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,1" alt="Stella" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?beer,1" alt="Stella" class="item-image" onclick="openItemModal('Cerveja Longneck Stella/Budweiser/Eisenbahn', 'Cerveja longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,1')">
           <div class="item-details">
             <h3 class="item-title">Stella, Budweiser ou Eisenbahn Longneck - R$9</h3>
             <p class="item-description">Cerveja longneck 355ml.</p>
@@ -1306,7 +1410,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,2" alt="Heineken" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?beer,2" alt="Heineken" class="item-image" onclick="openItemModal('Cerveja Longneck Heineken/Corona', 'Cerveja longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,2')">
           <div class="item-details">
             <h3 class="item-title">Heineken, Heineken Zero ou Corona Longneck - R$10</h3>
             <p class="item-description">Cerveja longneck 355ml.</p>
@@ -1318,7 +1422,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,3" alt="Cerveja 600ml" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?beer,3" alt="Cerveja 600ml" class="item-image" onclick="openItemModal('Cerveja 600ml Variadas', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,3')">
           <div class="item-details">
             <h3 class="item-title">Stella, Original, Spaten, Eisenbahn, Budweiser, Duplo Malte ou Serramalte 600ml - R$13</h3>
             <p class="item-description">Cerveja 600ml.</p>
@@ -1330,7 +1434,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,4" alt="Heineken 600ml" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?beer,4" alt="Heineken 600ml" class="item-image" onclick="openItemModal('Heineken 600ml', 'Cerveja Heineken 600ml.', 'https://source.unsplash.com/random/300x300/?beer,4')">
           <div class="item-details">
             <h3 class="item-title">Heineken 600ml - R$14</h3>
             <p class="item-description">Cerveja Heineken 600ml.</p>
@@ -1342,7 +1446,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,5" alt="Colorado" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?beer,5" alt="Colorado" class="item-image" onclick="openItemModal('Colorado 600ml', 'Cerveja artesanal Colorado 600ml.', 'https://source.unsplash.com/random/300x300/?beer,5')">
           <div class="item-details">
             <h3 class="item-title">Colorado 600ml - R$20</h3>
             <p class="item-description">Cerveja artesanal Colorado 600ml.</p>
@@ -1354,7 +1458,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,6" alt="Latão" class="item-image">
+          <img src="https://source.unsplash.com/random/300x300/?beer,6" alt="Latão" class="item-image" onclick="openItemModal('Latão Brahma/Antarctica', 'Cerveja em lata 473ml.', 'https://source.unsplash.com/random/300x300/?beer,6')">
           <div class="item-details">
             <h3 class="item-title">Latão de Brahma ou Antarctica - R$8</h3>
             <p class="item-description">Cerveja em lata 473ml.</p>
@@ -1485,8 +1589,21 @@
       </div>
       
       <div class="form-group" style="margin-top: 1.5rem;">
-        <button type="button" class="submit-order" onclick="addItemWithAddons()">Adicionar ao Carrinho</button>
+        <div class="addons-actions">
+          <button type="button" class="submit-order" style="background-color: #666;" onclick="closeAddonsModal()">Fechar</button>
+          <button type="button" class="submit-order" onclick="addItemWithAddons()">Adicionar ao Carrinho</button>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal de Visualização do Item -->
+  <div id="item-modal" class="item-modal">
+    <div class="item-modal-content">
+      <span class="close-modal" onclick="closeItemModal()">&times;</span>
+      <img id="item-modal-image" src="" alt="" class="item-modal-image">
+      <h3 id="item-modal-title" class="item-modal-title"></h3>
+      <p id="item-modal-description" class="item-modal-description"></p>
     </div>
   </div>
 
@@ -1524,7 +1641,7 @@
       const statusElement = document.getElementById('status-text');
       
       // Aberto de domingo a domingo das 19h às 00h
-      if (hours >= 19 || hours < 0) { // 19h (7PM) até 00h (meia-noite)
+      if (hours >= 10 || hours < 0) { // 19h (7PM) até 00h (meia-noite)
         statusElement.textContent = 'Aberto';
         statusElement.className = 'status open';
         return true;
@@ -1550,7 +1667,7 @@
     }
     
     // Adiciona item ao carrinho
-    function addItem(name, price, image, addonsList = []) {
+    function addItem(name, price, image, addonsList = [], notes = '') {
       let itemName = name;
       let itemPrice = price;
       let addonsDescription = '';
@@ -1568,7 +1685,7 @@
         itemName += addonsDescription;
       }
       
-      const existingItem = cart.find(item => item.name === itemName);
+      const existingItem = cart.find(item => item.name === itemName && item.notes === notes);
       
       if (existingItem) {
         existingItem.quantity += 1;
@@ -1579,7 +1696,8 @@
           basePrice: price,
           image: image, 
           quantity: 1,
-          addons: addonsList
+          addons: addonsList,
+          notes: notes
         });
       }
       
@@ -1605,6 +1723,18 @@
       updateLocalStorage();
     }
     
+    // Atualiza a quantidade de um item no carrinho
+    function updateQuantity(index, newQuantity) {
+      if (newQuantity < 1) {
+        removeItem(index);
+        return;
+      }
+      
+      cart[index].quantity = newQuantity;
+      updateCart();
+      updateLocalStorage();
+    }
+    
     // Atualiza a exibição do carrinho
     function updateCart() {
       const cartItemsElement = document.getElementById('cart-items');
@@ -1626,12 +1756,18 @@
         itemsHTML += `
           <div class="cart-item">
             <div class="cart-item-name">
-              ${item.name} (${item.quantity}x)
+              ${item.name}
               <button class="cart-item-remove" onclick="removeItem(${index})">
                 <i class="fas fa-trash"></i>
               </button>
             </div>
             <div class="cart-item-price">R$ ${itemTotal.toFixed(2)}</div>
+            <div class="cart-item-quantity">
+              <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button>
+              <span class="quantity-value">${item.quantity}</span>
+              <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity + 1})">+</button>
+            </div>
+            ${item.notes ? `<div class="cart-item-notes">Obs: ${item.notes}</div>` : ''}
           </div>
         `;
       });
@@ -1677,6 +1813,7 @@
             <span>${item.quantity}x ${item.name}</span>
             <span>R$ ${itemTotal.toFixed(2)}</span>
           </div>
+          ${item.notes ? `<div class="order-item" style="font-size: 0.8rem; color: #666;">- Obs: ${item.notes}</div>` : ''}
         `;
       });
       
@@ -1789,6 +1926,14 @@
         `;
       });
       
+      // Adiciona campo de observação
+      addonsHTML += `
+        <div class="form-group" style="margin-top: 1rem;">
+          <label for="item-notes">Observações:</label>
+          <textarea id="item-notes" placeholder="Ex: carne bem passada, sem mostarda, etc."></textarea>
+        </div>
+      `;
+      
       addonsListElement.innerHTML = addonsHTML;
       modal.style.display = 'block';
     }
@@ -1814,9 +1959,49 @@
     // Adiciona item com adicionais ao carrinho
     function addItemWithAddons() {
       if (currentItem) {
-        addItem(currentItem.name, currentItem.price, currentItem.image, currentAddons);
+        const notes = document.getElementById('item-notes') ? document.getElementById('item-notes').value : '';
+        addItem(currentItem.name, currentItem.price, currentItem.image, currentAddons, notes);
         closeAddonsModal();
       }
+    }
+    
+    // Abre o modal de visualização do item
+    function openItemModal(name, description, image) {
+      const modal = document.getElementById('item-modal');
+      const titleElement = document.getElementById('item-modal-title');
+      const descElement = document.getElementById('item-modal-description');
+      const imgElement = document.getElementById('item-modal-image');
+      
+      titleElement.textContent = name;
+      descElement.textContent = description;
+      imgElement.src = image;
+      imgElement.alt = name;
+      
+      modal.style.display = 'block';
+    }
+    
+    // Fecha o modal de visualização do item
+    function closeItemModal() {
+      const modal = document.getElementById('item-modal');
+      modal.style.display = 'none';
+    }
+    
+    // Gera um código de pedido único
+    function generateOrderCode(name, phone, street, number) {
+      // Pega as primeiras letras do nome (máximo 2)
+      const namePart = name.slice(0, 2).toUpperCase();
+      
+      // Pega os últimos 2 dígitos do telefone
+      const phonePart = phone.slice(-2);
+      
+      // Pega a primeira letra da rua
+      const streetPart = street ? street.charAt(0).toUpperCase() : 'X';
+      
+      // Pega o último dígito do número
+      const numberPart = number ? number.slice(-1) : '0';
+      
+      // Combina tudo para formar um código de 4 caracteres
+      return `${namePart}${phonePart}${streetPart}${numberPart}`;
     }
     
     // Envia o pedido
@@ -1845,6 +2030,9 @@
       // Incrementa número do pedido
       orderNumber++;
       
+      // Gera código do pedido
+      const orderCode = generateOrderCode(name, phone, street, number);
+      
       // Obtém data e hora atual
       const now = new Date();
       const hours = now.getHours().toString().padStart(2, '0');
@@ -1861,6 +2049,9 @@
         const itemTotal = item.price * item.quantity;
         subtotal += itemTotal;
         orderItems += `${item.quantity}x ${item.name} - R$ ${itemTotal.toFixed(2)}\n`;
+        if (item.notes) {
+          orderItems += `   Obs: ${item.notes}\n`;
+        }
       });
       
       const deliveryFee = deliveryOption === 'entrega' && deliveryFees[neighborhood] ? deliveryFees[neighborhood] : 0;
@@ -1868,7 +2059,7 @@
       
       // Monta mensagem para WhatsApp
       let message = `*NOVO PEDIDO - FOODTRUCK DO PITIU*\n\n`;
-      message += `*Pedido Nº:* ${orderNumber}\n`;
+      message += `*Pedido Nº:* ${orderCode}\n`;
       message += `*Data/Hora:* ${hours}:${minutes} em ${day}/${month}/${year}\n\n`;
       message += `*Cliente:* ${name}\n`;
       message += `*Telefone:* ${phone}\n\n`;
@@ -1953,6 +2144,7 @@
     window.onclick = function(event) {
       const checkoutModal = document.getElementById('checkout-modal');
       const addonsModal = document.getElementById('addons-modal');
+      const itemModal = document.getElementById('item-modal');
       
       if (event.target === checkoutModal) {
         closeModal();
@@ -1960,6 +2152,10 @@
       
       if (event.target === addonsModal) {
         closeAddonsModal();
+      }
+      
+      if (event.target === itemModal) {
+        closeItemModal();
       }
     }
     
