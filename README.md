@@ -1072,6 +1072,14 @@
       <!-- Pão de Queijo -->
       <div id="pao-queijo" class="category">
         <div class="category-header">Pão de Queijo Recheado</div>
+
+
+
+<!-- Pão de Queijo Salgado -->
+      <div id="smoothie" class="category">
+        <div class="category-header">Pão de Queijo Salgado</div>
+
+
         
         <div class="item">
           <img src="https://source.unsplash.com/random/300x300/?cheese-bread,1" alt="Sem Recheio" class="item-image" onclick="openItemModal('Pão de Queijo Sem Recheio', 'Pão de queijo tradicional sem recheio.', 'https://source.unsplash.com/random/300x300/?cheese-bread,1')">
@@ -1156,6 +1164,15 @@
             </div>
           </div>
         </div>
+
+
+
+<!-- Pão de Queijo Doce -->
+      <div id="smoothie" class="category">
+        <div class="category-header">Pão de Queijo Doce</div>
+
+
+        
         
         <!-- Adicionando a parte Doce -->
         <div class="item">
