@@ -9,6 +9,7 @@
   <meta name="format-detection" content="telephone=no">
   <title>Cardápio Completo - FoodTruck do Pitiu</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
   <style>
     :root {
       --primary-color: #d35400;
@@ -68,6 +69,41 @@
       background-color: rgba(0, 0, 0, 0.7);
       z-index: -1;
     }
+
+/* Botão de voltar ao topo */
+.back-to-top {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 99;
+}
+
+.back-to-top.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  background-color: #c0392b;
+}
+
+    
+
+
+
     
     .header {
       background-color: rgba(34, 34, 34, 0.9);
@@ -1079,6 +1115,13 @@
       <a href="https://wa.me/5521992254487" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
     </div>
   </div>
+
+
+<!-- Botão de voltar ao topo -->
+<div id="back-to-top" class="back-to-top">
+  <i class="fas fa-arrow-up"></i>
+</div>
+  
 
   <div class="tabs">
     <div class="tab-button active" onclick="scrollToSection('hamburgueres')">Hambúrgueres</div>
@@ -2847,6 +2890,29 @@
         });
       });
     });
+
+
+  // Botão de voltar ao topo
+const backToTopButton = document.getElementById('back-to-top');
+
+window.addEventListener('scroll', () => {
+  if (window.pageYOffset > 300) {
+    backToTopButton.classList.add('show');
+  } else {
+    backToTopButton.classList.remove('show');
+  }
+});
+
+backToTopButton.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
+
+
+
+  
 </script>
 </body>
 </html>
