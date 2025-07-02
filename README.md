@@ -1681,7 +1681,7 @@
 
     <!-- Carrinho de Compras -->
     <div class="cart-section">
-      <h2 class="cart-title">Seu Pedido</h2>
+      <h2 class="cart-title">Carrinho</h2>
       <div id="cart-items" class="cart-items">
         <div class="empty-cart">Seu carrinho está vazio</div>
       </div>
