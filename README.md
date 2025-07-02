@@ -461,6 +461,15 @@
       background-color: #c0392b;
     }
     
+    .preview-button {
+      background-color: var(--info-color);
+      color: white;
+    }
+    
+    .preview-button:hover, .preview-button:active {
+      background-color: #2980b9;
+    }
+    
     .empty-cart {
       text-align: center;
       color: #666;
@@ -821,6 +830,45 @@
       font-size: 0.9rem;
     }
     
+    /* Modal de Prévia do Pedido */
+    .preview-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1004;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .preview-content {
+      background-color: white;
+      margin: 1.5rem auto;
+      padding: 1.2rem;
+      border-radius: 8px;
+      max-width: 95%;
+      width: 100%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      box-sizing: border-box;
+    }
+    
+    .preview-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      width: 100%;
+      gap: 0.5rem;
+    }
+    
+    .preview-actions button {
+      flex: 1;
+      padding: 0.7rem;
+      font-size: 0.9rem;
+    }
+    
     /* Seções Salgada e Doce */
     .section-salty {
       background-color: var(--salty-section);
@@ -883,7 +931,7 @@
         min-width: 120px;
       }
       
-      .modal-content, .notes-content, .item-modal-content, .addons-content {
+      .modal-content, .notes-content, .item-modal-content, .addons-content, .preview-content {
         max-width: 500px;
         padding: 1.5rem;
       }
@@ -912,6 +960,10 @@
       
       .cart-items {
         max-height: 200px;
+      }
+      
+      .cart-actions {
+        flex-direction: row;
       }
     }
     
@@ -972,7 +1024,7 @@
     @media (max-width: 599px) {
       /* Garante que os botões do carrinho sejam visíveis */
       .cart-section {
-        padding-bottom: 80px; /* Espaço extra para os botões */
+        padding-bottom: 120px; /* Espaço extra para os botões */
       }
       
       .cart-actions {
@@ -984,6 +1036,9 @@
         padding: 0.8rem;
         box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
         z-index: 91;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
       }
       
       /* Ajusta a altura do container de itens do carrinho */
@@ -1903,7 +1958,8 @@
       </div>
       <div id="cart-total" class="cart-total">Total: R$ 0,00</div>
       <div class="cart-actions">
-        <button class="cart-button checkout-button" onclick="openCheckoutModal()">Finalizar Pedido</button>
+        <button class="cart-button preview-button" onclick="openPreviewModal()">Ver Prévia do Pedido</button>
+        <button class="cart-button checkout-button" onclick="openCheckoutModal()">Fechar Pedido</button>
         <button class="cart-button clear-button" onclick="clearCart()">Limpar Carrinho</button>
       </div>
     </div>
@@ -1989,11 +2045,17 @@
               <div class="payment-dot"></div>
             </div>
             <div class="payment-option">
-              <input type="radio" id="payment-card" name="payment" value="Cartão">
-              <label for="payment-card">Cartão (Máquina na entrega)</label>
+              <input type="radio" id="payment-card" name="payment" value="Cartão Crédito/Débito">
+              <label for="payment-card">Cartão Crédito/Débito</label>
               <div class="payment-dot"></div>
             </div>
           </div>
+        </div>
+        
+        <!-- Campo para troco quando pagamento em dinheiro -->
+        <div id="change-field" class="form-group" style="display: none;">
+          <label for="customer-change">Troco para quanto?</label>
+          <input type="text" id="customer-change" placeholder="Valor para troco (opcional)">
         </div>
         
         <div id="order-total" class="order-total">
@@ -2055,6 +2117,28 @@
     </div>
   </div>
 
+  <!-- Modal de Prévia do Pedido -->
+  <div id="preview-modal" class="preview-modal">
+    <div class="preview-content">
+      <span class="close-modal" onclick="closePreviewModal()">&times;</span>
+      <h2>Prévia do Pedido</h2>
+      
+      <div id="preview-items" class="order-summary">
+        <!-- Itens do pedido serão inseridos aqui pelo JavaScript -->
+      </div>
+      
+      <div id="preview-total" class="order-total">
+        Total: R$ 0,00
+      </div>
+      
+      <div class="preview-actions">
+        <button type="button" class="submit-order" style="background-color: #666;" onclick="closePreviewModal()">Incluir mais itens</button>
+        <button type="button" class="submit-order" onclick="openCheckoutModal()">Fechar Pedido</button>
+        <button type="button" class="submit-order" style="background-color: var(--danger-color);" onclick="clearCart(); closePreviewModal();">Limpar Carrinho</button>
+      </div>
+    </div>
+  </div>
+
 <script>
     let cart = [];
     let currentItem = null;
@@ -2091,7 +2175,7 @@
       const statusElement = document.getElementById('status-text');
       
       // Aberto de domingo a domingo das 19h às 00h
-      if (hours >= 19 || hours < 0) {
+      if (hours >= 7 || hours < 0) {
         statusElement.textContent = 'Aberto';
         statusElement.className = 'status open';
         return true;
@@ -2235,12 +2319,61 @@
       updateLocalStorage();
     }
     
+    // Abre o modal de prévia do pedido
+    function openPreviewModal() {
+      if (cart.length === 0) {
+        alert('Seu carrinho está vazio!');
+        return;
+      }
+      
+      const modal = document.getElementById('preview-modal');
+      modal.style.display = 'block';
+      
+      // Atualiza o resumo do pedido no modal
+      const previewItems = document.getElementById('preview-items');
+      const previewTotal = document.getElementById('preview-total');
+      let summaryHTML = '';
+      let total = 0;
+      
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        summaryHTML += `
+          <div class="order-item">
+            <span>${item.quantity}x ${item.name}</span>
+            <span>R$ ${itemTotal.toFixed(2)}</span>
+          </div>
+          ${item.notes ? `<div class="order-item" style="font-size: 0.8rem; color: #666;">- Obs: ${item.notes}</div>` : ''}
+        `;
+      });
+      
+      summaryHTML += `
+        <div class="order-item" style="border-top: 1px solid #ddd; padding-top: 0.5rem;">
+          <span><strong>Subtotal</strong></span>
+          <span><strong>R$ ${total.toFixed(2)}</strong></span>
+        </div>
+      `;
+      
+      previewItems.innerHTML = summaryHTML;
+      previewTotal.textContent = `Total: R$ ${total.toFixed(2)}`;
+    }
+    
+    // Fecha o modal de prévia do pedido
+    function closePreviewModal() {
+      const modal = document.getElementById('preview-modal');
+      modal.style.display = 'none';
+    }
+    
     // Abre o modal de checkout
     function openCheckoutModal() {
       if (cart.length === 0) {
         alert('Seu carrinho está vazio!');
         return;
       }
+      
+      // Fecha o modal de prévia se estiver aberto
+      closePreviewModal();
       
       // Verifica se está no horário de funcionamento
       if (!checkBusinessHours()) {
@@ -2338,6 +2471,7 @@
     function updateOrderTotal() {
       const neighborhood = document.getElementById('customer-neighborhood').value;
       const deliveryOption = document.querySelector('input[name="delivery-option"]:checked').value;
+      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
       const orderTotalElement = document.getElementById('order-total');
       
       let subtotal = 0;
@@ -2353,6 +2487,14 @@
       const total = subtotal + deliveryFee;
       
       orderTotalElement.textContent = `Total do Pedido: R$ ${total.toFixed(2)}`;
+      
+      // Mostra/oculta campo de troco conforme método de pagamento
+      const changeField = document.getElementById('change-field');
+      if (paymentMethod === 'Dinheiro') {
+        changeField.style.display = 'block';
+      } else {
+        changeField.style.display = 'none';
+      }
     }
     
     // Abre o modal de observação
@@ -2383,15 +2525,6 @@
       }
     }
     
-
-
-
-
-
-
-
-
-
     // Abre o modal de adicionais para hambúrgueres
     function openAddonsModal(name, price, image) {
       currentItem = { name, price, image };
@@ -2511,6 +2644,7 @@
       const complement = document.getElementById('customer-complement').value;
       const zipcode = document.getElementById('customer-zipcode').value;
       const payment = document.querySelector('input[name="payment"]:checked').value;
+      const changeFor = payment === 'Dinheiro' ? document.getElementById('customer-change').value : '';
       
       // Validação básica
       if (!name || !phone) {
@@ -2583,6 +2717,11 @@
       message += `*Total:* R$ ${total.toFixed(2)}\n\n`;
       message += `*Forma de pagamento:* ${payment}`;
       
+      // Adiciona informação de troco se for pagamento em dinheiro
+      if (payment === 'Dinheiro' && changeFor) {
+        message += `\n*Troco para:* R$ ${changeFor}`;
+      }
+      
       // Codifica a mensagem para URL
       const encodedMessage = encodeURIComponent(message);
       
@@ -2644,6 +2783,7 @@
       const notesModal = document.getElementById('notes-modal');
       const itemModal = document.getElementById('item-modal');
       const addonsModal = document.getElementById('addons-modal');
+      const previewModal = document.getElementById('preview-modal');
       
       if (event.target === checkoutModal) {
         closeModal();
@@ -2659,6 +2799,10 @@
       
       if (event.target === addonsModal) {
         closeAddonsModal();
+      }
+      
+      if (event.target === previewModal) {
+        closePreviewModal();
       }
     }
     
@@ -2696,5 +2840,14 @@
       if (hamburgerTab) {
         tabsContainer.scrollLeft = 0;
       }
+      
+      // Atualiza o campo de troco conforme método de pagamento
+      document.querySelectorAll('input[name="payment"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          updateOrderTotal();
+        });
+      });
     });
 </script>
+</body>
+</html>
