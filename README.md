@@ -50,7 +50,7 @@
       background-size: cover;
       background-attachment: fixed;
       background-position: center;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.1);
       background-blend-mode: soft-light;
       touch-action: manipulation;
       width: 100%;
@@ -66,7 +66,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.2);
       z-index: -1;
     }
 
