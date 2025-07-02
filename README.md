@@ -423,6 +423,9 @@
     
     .cart-actions {
       margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
     
     .cart-button {
@@ -433,7 +436,6 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s;
-      margin-bottom: 0.5rem;
       touch-action: manipulation;
       font-size: 0.9rem;
     }
@@ -749,6 +751,73 @@
       color: white;
     }
     
+    /* Modal de Adicionais */
+    .addons-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1003;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .addons-content {
+      background-color: white;
+      margin: 1.5rem auto;
+      padding: 1.2rem;
+      border-radius: 8px;
+      max-width: 95%;
+      width: 100%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      box-sizing: border-box;
+    }
+    
+    .addon-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .addon-option:last-child {
+      border-bottom: none;
+    }
+    
+    .addon-name {
+      flex: 1;
+    }
+    
+    .addon-price {
+      margin-left: 1rem;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+    
+    .addon-checkbox {
+      margin-left: 1rem;
+      width: 20px;
+      height: 20px;
+    }
+    
+    .addons-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      width: 100%;
+      gap: 0.5rem;
+    }
+    
+    .addons-actions button {
+      flex: 1;
+      padding: 0.7rem;
+      font-size: 0.9rem;
+    }
+    
     /* Responsividade para tablets */
     @media (min-width: 600px) {
       .header h1 {
@@ -788,7 +857,7 @@
         min-width: 120px;
       }
       
-      .modal-content, .notes-content, .item-modal-content {
+      .modal-content, .notes-content, .item-modal-content, .addons-content {
         max-width: 500px;
         padding: 1.5rem;
       }
@@ -910,7 +979,7 @@
             <p class="item-description">Blend da casa de 180g, queijo prato e mussarela no pão brioche.</p>
             <div class="item-price">R$ 18,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Carne no Prato', 18, 'https://source.unsplash.com/random/300x300/?burger,1')">Adicionar</button>
+              <button class="add-to-cart" onclick="openAddonsModal('Carne no Prato', 18, 'https://source.unsplash.com/random/300x300/?burger,1')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -922,7 +991,7 @@
             <p class="item-description">Blend da casa de 180g, queijo prato, mussarela e maionese da casa no pão brioche.</p>
             <div class="item-price">R$ 22,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Cheeseburguer', 22, 'https://source.unsplash.com/random/300x300/?burger,2')">Adicionar</button>
+              <button class="add-to-cart" onclick="openAddonsModal('Cheeseburguer', 22, 'https://source.unsplash.com/random/300x300/?burger,2')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -934,7 +1003,7 @@
             <p class="item-description">Blend da casa de 180g, calabresa, queijo prato, mussarela e maionese da casa no pão brioche.</p>
             <div class="item-price">R$ 23,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Cheese Calabresa', 23, 'https://source.unsplash.com/random/300x300/?burger,3')">Adicionar</button>
+              <button class="add-to-cart" onclick="openAddonsModal('Cheese Calabresa', 23, 'https://source.unsplash.com/random/300x300/?burger,3')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -946,7 +1015,7 @@
             <p class="item-description">Blend da casa de 180g, bacon, queijo prato, mussarela e maionese da casa no pão brioche.</p>
             <div class="item-price">R$ 26,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Cheese Bacon', 26, 'https://source.unsplash.com/random/300x300/?burger,4')">Adicionar</button>
+              <button class="add-to-cart" onclick="openAddonsModal('Cheese Bacon', 26, 'https://source.unsplash.com/random/300x300/?burger,4')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -958,7 +1027,7 @@
             <p class="item-description">Blend da casa de 90g, queijo prato, mussarela no pão brioche.</p>
             <div class="item-price">R$ 18,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Kids', 18, 'https://source.unsplash.com/random/300x300/?burger,5')">Adicionar</button>
+              <button class="add-to-cart" onclick="openAddonsModal('Kids', 18, 'https://source.unsplash.com/random/300x300/?burger,5')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -970,7 +1039,7 @@
             <p class="item-description">Blend da casa de 180g, anéis de cebola, bacon, calabresa, queijo prato, mussarela, barbecue e maionese da casa no pão triplo X (brioche com bacon, calabresa e parmesão).</p>
             <div class="item-price">R$ 32,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Black', 32, 'https://source.unsplash.com/random/300x300/?burger,6')">Adicionar</button>
+              <button class="add-to-cart" onclick="openAddonsModal('Black', 32, 'https://source.unsplash.com/random/300x300/?burger,6')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -982,7 +1051,7 @@
             <p class="item-description">Blend da casa de 180g, bacon, cebola caramelizada e cheddar cremoso no pão australiano.</p>
             <div class="item-price">R$ 32,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Cheddar Cremoso', 32, 'https://source.unsplash.com/random/300x300/?burger,7')">Adicionar</button>
+              <button class="add-to-cart" onclick="openAddonsModal('Cheddar Cremoso', 32, 'https://source.unsplash.com/random/300x300/?burger,7')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -994,7 +1063,7 @@
             <p class="item-description">Blend da casa de 180g, bacon, cebola caramelizada, cheddar cremoso e catupiry no pão de queijo.</p>
             <div class="item-price">R$ 34,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pitiuzinho', 34, 'https://source.unsplash.com/random/300x300/?burger,8')">Adicionar</button>
+              <button class="add-to-cart" onclick="openAddonsModal('Pitiuzinho', 34, 'https://source.unsplash.com/random/300x300/?burger,8')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -1748,6 +1817,28 @@
     </div>
   </div>
 
+  <!-- Modal de Adicionais -->
+  <div id="addons-modal" class="addons-modal">
+    <div class="addons-content">
+      <span class="close-modal" onclick="closeAddonsModal()">&times;</span>
+      <h2 id="addons-item-title">Adicionais</h2>
+      
+      <div id="addons-list">
+        <!-- Adicionais serão inseridos aqui pelo JavaScript -->
+      </div>
+      
+      <div class="form-group">
+        <label for="addons-notes">Observações (opcional):</label>
+        <textarea id="addons-notes" placeholder="Ex: sem cebola, sem maionese, etc."></textarea>
+      </div>
+      
+      <div class="addons-actions">
+        <button type="button" class="submit-order" style="background-color: #666;" onclick="closeAddonsModal()">Cancelar</button>
+        <button type="button" class="submit-order" onclick="addItemWithAddons()">Adicionar ao Carrinho</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let cart = [];
     let currentItem = null;
@@ -1764,6 +1855,18 @@
       'Praça Seca': 15,
       'Tanque': 15
     };
+    
+    // Lista de adicionais para hambúrgueres
+    const hamburgerAddons = [
+      { name: "Carne", price: 8.00 },
+      { name: "Bacon ou Calabresa", price: 4.00 },
+      { name: "Cheddar ou Catupiry", price: 5.00 },
+      { name: "Queijo Prato ou Mussarela", price: 1.50 },
+      { name: "Ovo", price: 1.00 },
+      { name: "Cebola Caramelizada", price: 2.00 },
+      { name: "Trocar pão tradicional por pão de queijo", price: 4.00 },
+      { name: "Não incluir nada", price: 0.00 }
+    ];
     
     // Verifica se está no horário de funcionamento
     function checkBusinessHours() {
@@ -1886,13 +1989,15 @@
         
         itemsHTML += `
           <div class="cart-item">
-            <div class="cart-item-name">
-              ${item.name}
-              <button class="cart-item-remove" onclick="removeItem(${index})">
-                <i class="fas fa-trash"></i>
-              </button>
+            <div class="cart-item-row">
+              <div class="cart-item-name">
+                ${item.name}
+                <button class="cart-item-remove" onclick="removeItem(${index})">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              <div class="cart-item-price">R$ ${itemTotal.toFixed(2)}</div>
             </div>
-            <div class="cart-item-price">R$ ${itemTotal.toFixed(2)}</div>
             <div class="cart-item-quantity">
               <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity - 1})">-</button>
               <span class="quantity-value">${item.quantity}</span>
@@ -2059,6 +2164,75 @@
         const notes = document.getElementById('item-notes').value;
         addItem(currentItem.name, currentItem.price, currentItem.image, [], notes);
         closeNotesModal();
+      }
+    }
+    
+    // Abre o modal de adicionais para hambúrgueres
+    function openAddonsModal(name, price, image) {
+      currentItem = { name, price, image };
+      currentAddons = [];
+      
+      const modal = document.getElementById('addons-modal');
+      const titleElement = document.getElementById('addons-item-title');
+      const addonsListElement = document.getElementById('addons-list');
+      
+      titleElement.textContent = `Adicionais para ${name}`;
+      document.getElementById('addons-notes').value = '';
+      
+      // Limpa a lista de adicionais
+      addonsListElement.innerHTML = '';
+      
+      // Adiciona cada opção de adicional
+      hamburgerAddons.forEach((addon, index) => {
+        const addonElement = document.createElement('div');
+        addonElement.className = 'addon-option';
+        addonElement.innerHTML = `
+          <div class="addon-name">${addon.name}</div>
+          <div class="addon-price">R$ ${addon.price.toFixed(2)}</div>
+          <input type="checkbox" id="addon-${index}" class="addon-checkbox" 
+                 data-name="${addon.name}" data-price="${addon.price}" 
+                 onchange="toggleAddon(this, ${index})">
+        `;
+        addonsListElement.appendChild(addonElement);
+      });
+      
+      modal.style.display = 'block';
+    }
+    
+    // Fecha o modal de adicionais
+    function closeAddonsModal() {
+      const modal = document.getElementById('addons-modal');
+      modal.style.display = 'none';
+    }
+    
+    // Alterna um adicional selecionado
+    function toggleAddon(checkbox, index) {
+      const addon = hamburgerAddons[index];
+      
+      if (checkbox.checked) {
+        // Se for "Não incluir nada", desmarca todos os outros
+        if (addon.name === "Não incluir nada") {
+          document.querySelectorAll('.addon-checkbox').forEach(cb => {
+            if (cb !== checkbox) cb.checked = false;
+          });
+          currentAddons = [addon];
+        } else {
+          // Remove "Não incluir nada" se estiver selecionado
+          currentAddons = currentAddons.filter(a => a.name !== "Não incluir nada");
+          currentAddons.push(addon);
+        }
+      } else {
+        // Remove o adicional da lista
+        currentAddons = currentAddons.filter(a => a.name !== addon.name);
+      }
+    }
+    
+    // Adiciona item com adicionais ao carrinho
+    function addItemWithAddons() {
+      if (currentItem) {
+        const notes = document.getElementById('addons-notes').value;
+        addItem(currentItem.name, currentItem.price, currentItem.image, currentAddons, notes);
+        closeAddonsModal();
       }
     }
     
@@ -2242,6 +2416,7 @@
       const checkoutModal = document.getElementById('checkout-modal');
       const notesModal = document.getElementById('notes-modal');
       const itemModal = document.getElementById('item-modal');
+      const addonsModal = document.getElementById('addons-modal');
       
       if (event.target === checkoutModal) {
         closeModal();
@@ -2253,6 +2428,10 @@
       
       if (event.target === itemModal) {
         closeItemModal();
+      }
+      
+      if (event.target === addonsModal) {
+        closeAddonsModal();
       }
     }
     
