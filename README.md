@@ -50,8 +50,8 @@
       background-size: cover;
       background-attachment: fixed;
       background-position: center;
-      background-color: rgba(0, 0, 0, 0.7);
-      background-blend-mode: overlay;
+      background-color: rgba(0, 0, 0, 0.3);
+      background-blend-mode: soft-light;
       touch-action: manipulation;
       width: 100%;
       overflow-x: hidden;
