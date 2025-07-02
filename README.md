@@ -1200,7 +1200,7 @@
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?burger,6" alt="Black" class="item-image" onclick="openItemModal('Black', 'Blend da casa de 180g, anéis de cebola, bacon, calabresa, queijo prato, mussarela, barbecue e maionese da casa no pão triplo X (brioche com bacon, calabresa e parmesão).', 'https://source.unsplash.com/random/300x300/?burger,6')">
+          <img src="black.png" alt="Black" class="item-image" onclick="openItemModal('Black', 'Blend da casa de 180g, anéis de cebola, bacon, calabresa, queijo prato, mussarela, barbecue e maionese da casa no pão triplo X (brioche com bacon, calabresa e parmesão).', 'https://source.unsplash.com/random/300x300/?burger,6')">
           <div class="item-details">
             <h3 class="item-title">Black - R$32</h3>
             <p class="item-description">Blend da casa de 180g, anéis de cebola, bacon, calabresa, queijo prato, mussarela, barbecue e maionese da casa no pão triplo X (brioche com bacon, calabresa e parmesão).</p>
