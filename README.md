@@ -1244,7 +1244,7 @@
           <div class="section-title">Salgados</div>
           
           <div class="item">
-            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,1" alt="Sem Recheio" class="item-image" onclick="openItemModal('Pão de Queijo Sem Recheio', 'Pão de queijo tradicional sem recheio.', 'https://source.unsplash.com/random/300x300/?cheese-bread,1')">
+            <img src="paodequeijo1.png" alt="Sem Recheio" class="item-image" onclick="openItemModal('Pão de Queijo Sem Recheio', 'Pão de queijo tradicional sem recheio.', 'paodequeijo1.png')">
             <div class="item-details">
               <h3 class="item-title">Sem Recheio - R$9</h3>
               <p class="item-description">Pão de queijo tradicional sem recheio.</p>
