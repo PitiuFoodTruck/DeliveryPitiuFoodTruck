@@ -20,6 +20,8 @@
       --info-color: #3498db;
       --open-color: #2ecc71;
       --closed-color: #e74c3c;
+      --salty-section: rgba(52, 152, 219, 0.1);
+      --sweet-section: rgba(231, 76, 60, 0.1);
     }
     
     * {
@@ -188,7 +190,7 @@
       width: 100%;
       box-sizing: border-box;
       position: relative;
-      padding-bottom: 80px; /* Reduzido de 120px para 80px (3 dedos a menos) */
+      padding-bottom: 80px;
     }
     
     .menu-section {
@@ -208,7 +210,7 @@
       left: 0;
       right: 0;
       box-sizing: border-box;
-      max-height: 40vh; /* Reduzido de 50vh para 40vh (3 dedos a menos) */
+      max-height: 40vh;
       overflow-y: auto;
       transform: translateY(0);
       transition: transform 0.3s ease;
@@ -333,7 +335,7 @@
     
     .cart-items {
       margin-bottom: 0.8rem;
-      max-height: 150px; /* Reduzido de 200px para 150px (3 dedos a menos) */
+      max-height: 150px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       width: 100%;
@@ -818,6 +820,29 @@
       font-size: 0.9rem;
     }
     
+    /* Seções Salgada e Doce */
+    .section-salty {
+      background-color: var(--salty-section);
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 4px;
+    }
+    
+    .section-sweet {
+      background-color: var(--sweet-section);
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 4px;
+    }
+    
+    .section-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: var(--dark-color);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+    
     /* Responsividade para tablets */
     @media (min-width: 600px) {
       .header h1 {
@@ -899,9 +924,10 @@
         top: 60px;
         height: calc(100vh - 60px);
         bottom: auto;
-        max-width: 320px; /* Reduzido de 350px para 320px (3 dedos a menos) */
+        max-width: 320px;
         max-height: none;
         transform: none !important;
+        overflow-y: auto;
       }
       
       .item-image {
@@ -1073,159 +1099,166 @@
       <div id="pao-queijo" class="category">
         <div class="category-header">Pão de Queijo Recheado</div>
         
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,1" alt="Sem Recheio" class="item-image" onclick="openItemModal('Pão de Queijo Sem Recheio', 'Pão de queijo tradicional sem recheio.', 'https://source.unsplash.com/random/300x300/?cheese-bread,1')">
-          <div class="item-details">
-            <h3 class="item-title">Sem Recheio - R$9</h3>
-            <p class="item-description">Pão de queijo tradicional sem recheio.</p>
-            <div class="item-price">R$ 9,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Sem Recheio', 9, 'https://source.unsplash.com/random/300x300/?cheese-bread,1')">Adicionar</button>
+        <div class="section-salty">
+          <div class="section-title">Salgados</div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,1" alt="Sem Recheio" class="item-image" onclick="openItemModal('Pão de Queijo Sem Recheio', 'Pão de queijo tradicional sem recheio.', 'https://source.unsplash.com/random/300x300/?cheese-bread,1')">
+            <div class="item-details">
+              <h3 class="item-title">Sem Recheio - R$9</h3>
+              <p class="item-description">Pão de queijo tradicional sem recheio.</p>
+              <div class="item-price">R$ 9,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Sem Recheio', 9, 'https://source.unsplash.com/random/300x300/?cheese-bread,1')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,2" alt="Frango com Catupiry" class="item-image" onclick="openItemModal('Pão de Queijo Frango Catupiry', 'Frango desfiado com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,2')">
+            <div class="item-details">
+              <h3 class="item-title">Frango com Catupiry - R$18</h3>
+              <p class="item-description">Frango desfiado com catupiry cremoso.</p>
+              <div class="item-price">R$ 18,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Frango Catupiry', 18, 'https://source.unsplash.com/random/300x300/?cheese-bread,2')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,3" alt="Cheddar" class="item-image" onclick="openItemModal('Pão de Queijo Cheddar', 'Recheio de cheddar derretido com opção de cebola.', 'https://source.unsplash.com/random/300x300/?cheese-bread,3')">
+            <div class="item-details">
+              <h3 class="item-title">Cheddar (com ou sem cebola) - R$17</h3>
+              <p class="item-description">Recheio de cheddar derretido com opção de cebola.</p>
+              <div class="item-price">R$ 17,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Cheddar', 17, 'https://source.unsplash.com/random/300x300/?cheese-bread,3')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,4" alt="Catupiry" class="item-image" onclick="openItemModal('Pão de Queijo Catupiry', 'Recheio de catupiry cremoso com opção de cebola.', 'https://source.unsplash.com/random/300x300/?cheese-bread,4')">
+            <div class="item-details">
+              <h3 class="item-title">Catupiry (com ou sem cebola) - R$17</h3>
+              <p class="item-description">Recheio de catupiry cremoso com opção de cebola.</p>
+              <div class="item-price">R$ 17,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Catupiry', 17, 'https://source.unsplash.com/random/300x300/?cheese-bread,4')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,5" alt="Chester Defumado" class="item-image" onclick="openItemModal('Pão de Queijo Chester Catupiry', 'Carne de chester defumada com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,5')">
+            <div class="item-details">
+              <h3 class="item-title">Chester Defumado com Catupiry - R$19</h3>
+              <p class="item-description">Carne de chester defumada com catupiry cremoso.</p>
+              <div class="item-price">R$ 19,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Chester Catupiry', 19, 'https://source.unsplash.com/random/300x300/?cheese-bread,5')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,6" alt="Carne Seca" class="item-image" onclick="openItemModal('Pão de Queijo Carne Seca Catupiry', 'Carne seca desfiada com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,6')">
+            <div class="item-details">
+              <h3 class="item-title">Carne Seca com Catupiry - R$20</h3>
+              <p class="item-description">Carne seca desfiada com catupiry cremoso.</p>
+              <div class="item-price">R$ 20,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Carne Seca Catupiry', 20, 'https://source.unsplash.com/random/300x300/?cheese-bread,6')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,7" alt="Camarão" class="item-image" onclick="openItemModal('Pão de Queijo Camarão Catupiry', 'Camarão ao molho com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,7')">
+            <div class="item-details">
+              <h3 class="item-title">Camarão com Catupiry - R$23</h3>
+              <p class="item-description">Camarão ao molho com catupiry cremoso.</p>
+              <div class="item-price">R$ 23,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Camarão Catupiry', 23, 'https://source.unsplash.com/random/300x300/?cheese-bread,7')">Adicionar</button>
+              </div>
             </div>
           </div>
         </div>
         
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,2" alt="Frango com Catupiry" class="item-image" onclick="openItemModal('Pão de Queijo Frango Catupiry', 'Frango desfiado com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,2')">
-          <div class="item-details">
-            <h3 class="item-title">Frango com Catupiry - R$18</h3>
-            <p class="item-description">Frango desfiado com catupiry cremoso.</p>
-            <div class="item-price">R$ 18,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Frango Catupiry', 18, 'https://source.unsplash.com/random/300x300/?cheese-bread,2')">Adicionar</button>
+        <div class="section-sweet">
+          <div class="section-title">Doces</div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,8" alt="Doce de Leite" class="item-image" onclick="openItemModal('Pão de Queijo Doce de Leite', 'Pão de queijo recheado com doce de leite cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,8')">
+            <div class="item-details">
+              <h3 class="item-title">Doce de Leite - R$14</h3>
+              <p class="item-description">Pão de queijo recheado com doce de leite cremoso.</p>
+              <div class="item-price">R$ 14,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Doce de Leite', 14, 'https://source.unsplash.com/random/300x300/?cheese-bread,8')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,3" alt="Cheddar" class="item-image" onclick="openItemModal('Pão de Queijo Cheddar', 'Recheio de cheddar derretido com opção de cebola.', 'https://source.unsplash.com/random/300x300/?cheese-bread,3')">
-          <div class="item-details">
-            <h3 class="item-title">Cheddar (com ou sem cebola) - R$17</h3>
-            <p class="item-description">Recheio de cheddar derretido com opção de cebola.</p>
-            <div class="item-price">R$ 17,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Cheddar', 17, 'https://source.unsplash.com/random/300x300/?cheese-bread,3')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,9" alt="Romeu e Julieta" class="item-image" onclick="openItemModal('Pão de Queijo Romeu e Julieta', 'Pão de queijo recheado com queijo e goiabada.', 'https://source.unsplash.com/random/300x300/?cheese-bread,9')">
+            <div class="item-details">
+              <h3 class="item-title">Romeu e Julieta - R$15</h3>
+              <p class="item-description">Pão de queijo recheado com queijo e goiabada.</p>
+              <div class="item-price">R$ 15,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Romeu e Julieta', 15, 'https://source.unsplash.com/random/300x300/?cheese-bread,9')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,4" alt="Catupiry" class="item-image" onclick="openItemModal('Pão de Queijo Catupiry', 'Recheio de catupiry cremoso com opção de cebola.', 'https://source.unsplash.com/random/300x300/?cheese-bread,4')">
-          <div class="item-details">
-            <h3 class="item-title">Catupiry (com ou sem cebola) - R$17</h3>
-            <p class="item-description">Recheio de catupiry cremoso com opção de cebola.</p>
-            <div class="item-price">R$ 17,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Catupiry', 17, 'https://source.unsplash.com/random/300x300/?cheese-bread,4')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,10" alt="Chocolate Preto" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Preto', 'Pão de queijo recheado com chocolate preto.', 'https://source.unsplash.com/random/300x300/?cheese-bread,10')">
+            <div class="item-details">
+              <h3 class="item-title">Chocolate Preto - R$16</h3>
+              <p class="item-description">Pão de queijo recheado com chocolate preto.</p>
+              <div class="item-price">R$ 16,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Chocolate Preto', 16, 'https://source.unsplash.com/random/300x300/?cheese-bread,10')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,5" alt="Chester Defumado" class="item-image" onclick="openItemModal('Pão de Queijo Chester Catupiry', 'Carne de chester defumada com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,5')">
-          <div class="item-details">
-            <h3 class="item-title">Chester Defumado com Catupiry - R$19</h3>
-            <p class="item-description">Carne de chester defumada com catupiry cremoso.</p>
-            <div class="item-price">R$ 19,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Chester Catupiry', 19, 'https://source.unsplash.com/random/300x300/?cheese-bread,5')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,11" alt="Chocolate Branco" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Branco', 'Pão de queijo recheado com chocolate branco.', 'https://source.unsplash.com/random/300x300/?cheese-bread,11')">
+            <div class="item-details">
+              <h3 class="item-title">Chocolate Branco - R$16</h3>
+              <p class="item-description">Pão de queijo recheado com chocolate branco.</p>
+              <div class="item-price">R$ 16,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Chocolate Branco', 16, 'https://source.unsplash.com/random/300x300/?cheese-bread,11')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,6" alt="Carne Seca" class="item-image" onclick="openItemModal('Pão de Queijo Carne Seca Catupiry', 'Carne seca desfiada com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,6')">
-          <div class="item-details">
-            <h3 class="item-title">Carne Seca com Catupiry - R$20</h3>
-            <p class="item-description">Carne seca desfiada com catupiry cremoso.</p>
-            <div class="item-price">R$ 20,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Carne Seca Catupiry', 20, 'https://source.unsplash.com/random/300x300/?cheese-bread,6')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,12" alt="Chocolate Misto" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Misto', 'Pão de queijo recheado com chocolate preto e branco.', 'https://source.unsplash.com/random/300x300/?cheese-bread,12')">
+            <div class="item-details">
+              <h3 class="item-title">Chocolate Misto - R$16</h3>
+              <p class="item-description">Pão de queijo recheado com chocolate preto e branco.</p>
+              <div class="item-price">R$ 16,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Chocolate Misto', 16, 'https://source.unsplash.com/random/300x300/?cheese-bread,12')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,7" alt="Camarão" class="item-image" onclick="openItemModal('Pão de Queijo Camarão Catupiry', 'Camarão ao molho com catupiry cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,7')">
-          <div class="item-details">
-            <h3 class="item-title">Camarão com Catupiry - R$23</h3>
-            <p class="item-description">Camarão ao molho com catupiry cremoso.</p>
-            <div class="item-price">R$ 23,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Camarão Catupiry', 23, 'https://source.unsplash.com/random/300x300/?cheese-bread,7')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Adicionando a parte Doce -->
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,8" alt="Doce de Leite" class="item-image" onclick="openItemModal('Pão de Queijo Doce de Leite', 'Pão de queijo recheado com doce de leite cremoso.', 'https://source.unsplash.com/random/300x300/?cheese-bread,8')">
-          <div class="item-details">
-            <h3 class="item-title">Doce de Leite - R$14</h3>
-            <p class="item-description">Pão de queijo recheado com doce de leite cremoso.</p>
-            <div class="item-price">R$ 14,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Doce de Leite', 14, 'https://source.unsplash.com/random/300x300/?cheese-bread,8')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,9" alt="Romeu e Julieta" class="item-image" onclick="openItemModal('Pão de Queijo Romeu e Julieta', 'Pão de queijo recheado com queijo e goiabada.', 'https://source.unsplash.com/random/300x300/?cheese-bread,9')">
-          <div class="item-details">
-            <h3 class="item-title">Romeu e Julieta - R$15</h3>
-            <p class="item-description">Pão de queijo recheado com queijo e goiabada.</p>
-            <div class="item-price">R$ 15,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Romeu e Julieta', 15, 'https://source.unsplash.com/random/300x300/?cheese-bread,9')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,10" alt="Chocolate Preto" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Preto', 'Pão de queijo recheado com chocolate preto.', 'https://source.unsplash.com/random/300x300/?cheese-bread,10')">
-          <div class="item-details">
-            <h3 class="item-title">Chocolate Preto - R$16</h3>
-            <p class="item-description">Pão de queijo recheado com chocolate preto.</p>
-            <div class="item-price">R$ 16,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Chocolate Preto', 16, 'https://source.unsplash.com/random/300x300/?cheese-bread,10')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,11" alt="Chocolate Branco" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Branco', 'Pão de queijo recheado com chocolate branco.', 'https://source.unsplash.com/random/300x300/?cheese-bread,11')">
-          <div class="item-details">
-            <h3 class="item-title">Chocolate Branco - R$16</h3>
-            <p class="item-description">Pão de queijo recheado com chocolate branco.</p>
-            <div class="item-price">R$ 16,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Chocolate Branco', 16, 'https://source.unsplash.com/random/300x300/?cheese-bread,11')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,12" alt="Chocolate Misto" class="item-image" onclick="openItemModal('Pão de Queijo Chocolate Misto', 'Pão de queijo recheado com chocolate preto e branco.', 'https://source.unsplash.com/random/300x300/?cheese-bread,12')">
-          <div class="item-details">
-            <h3 class="item-title">Chocolate Misto - R$16</h3>
-            <p class="item-description">Pão de queijo recheado com chocolate preto e branco.</p>
-            <div class="item-price">R$ 16,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Chocolate Misto', 16, 'https://source.unsplash.com/random/300x300/?cheese-bread,12')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?cheese-bread,13" alt="Nutella" class="item-image" onclick="openItemModal('Pão de Queijo Nutella', 'Pão de queijo recheado com Nutella e opção de morango.', 'https://source.unsplash.com/random/300x300/?cheese-bread,13')">
-          <div class="item-details">
-            <h3 class="item-title">Nutella (com ou sem morango) - R$20</h3>
-            <p class="item-description">Pão de queijo recheado com Nutella e opção de morango.</p>
-            <div class="item-price">R$ 20,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Nutella', 20, 'https://source.unsplash.com/random/300x300/?cheese-bread,13')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?cheese-bread,13" alt="Nutella" class="item-image" onclick="openItemModal('Pão de Queijo Nutella', 'Pão de queijo recheado com Nutella e opção de morango.', 'https://source.unsplash.com/random/300x300/?cheese-bread,13')">
+            <div class="item-details">
+              <h3 class="item-title">Nutella (com ou sem morango) - R$20</h3>
+              <p class="item-description">Pão de queijo recheado com Nutella e opção de morango.</p>
+              <div class="item-price">R$ 20,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pão de Queijo Nutella', 20, 'https://source.unsplash.com/random/300x300/?cheese-bread,13')">Adicionar</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1235,159 +1268,166 @@
       <div id="pastelzinho" class="category">
         <div class="category-header">Pastelzinho</div>
         
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,1" alt="Queijo" class="item-image" onclick="openItemModal('Pastelzinho Queijo', 'Pastelzinho recheado com queijo derretido.', 'https://source.unsplash.com/random/300x300/?pastry,1')">
-          <div class="item-details">
-            <h3 class="item-title">Queijo - R$6</h3>
-            <p class="item-description">Pastelzinho recheado com queijo derretido.</p>
-            <div class="item-price">R$ 6,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Queijo', 6, 'https://source.unsplash.com/random/300x300/?pastry,1')">Adicionar</button>
+        <div class="section-salty">
+          <div class="section-title">Salgados</div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,1" alt="Queijo" class="item-image" onclick="openItemModal('Pastelzinho Queijo', 'Pastelzinho recheado com queijo derretido.', 'https://source.unsplash.com/random/300x300/?pastry,1')">
+            <div class="item-details">
+              <h3 class="item-title">Queijo - R$6</h3>
+              <p class="item-description">Pastelzinho recheado com queijo derretido.</p>
+              <div class="item-price">R$ 6,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Queijo', 6, 'https://source.unsplash.com/random/300x300/?pastry,1')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,2" alt="Cheddar" class="item-image" onclick="openItemModal('Pastelzinho Cheddar', 'Pastelzinho recheado com cheddar derretido e opção de cebola.', 'https://source.unsplash.com/random/300x300/?pastry,2')">
+            <div class="item-details">
+              <h3 class="item-title">Cheddar (com ou sem cebola) - R$6</h3>
+              <p class="item-description">Pastelzinho recheado com cheddar derretido e opção de cebola.</p>
+              <div class="item-price">R$ 6,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Cheddar', 6, 'https://source.unsplash.com/random/300x300/?pastry,2')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,3" alt="Catupiry" class="item-image" onclick="openItemModal('Pastelzinho Catupiry', 'Pastelzinho recheado com catupiry cremoso e opção de cebola.', 'https://source.unsplash.com/random/300x300/?pastry,3')">
+            <div class="item-details">
+              <h3 class="item-title">Catupiry (com ou sem cebola) - R$6</h3>
+              <p class="item-description">Pastelzinho recheado com catupiry cremoso e opção de cebola.</p>
+              <div class="item-price">R$ 6,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Catupiry', 6, 'https://source.unsplash.com/random/300x300/?pastry,3')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,4" alt="Carne Moída" class="item-image" onclick="openItemModal('Pastelzinho Carne Moída', 'Pastelzinho recheado com carne moída temperada.', 'https://source.unsplash.com/random/300x300/?pastry,4')">
+            <div class="item-details">
+              <h3 class="item-title">Carne Moída - R$7</h3>
+              <p class="item-description">Pastelzinho recheado com carne moída temperada.</p>
+              <div class="item-price">R$ 7,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Carne Moída', 7, 'https://source.unsplash.com/random/300x300/?pastry,4')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,5" alt="Carne Seca" class="item-image" onclick="openItemModal('Pastelzinho Carne Seca', 'Pastelzinho recheado com carne seca desfiada.', 'https://source.unsplash.com/random/300x300/?pastry,5')">
+            <div class="item-details">
+              <h3 class="item-title">Carne Seca - R$7</h3>
+              <p class="item-description">Pastelzinho recheado com carne seca desfiada.</p>
+              <div class="item-price">R$ 7,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Carne Seca', 7, 'https://source.unsplash.com/random/300x300/?pastry,5')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,6" alt="Camarão" class="item-image" onclick="openItemModal('Pastelzinho Camarão', 'Pastelzinho recheado com camarão ao molho.', 'https://source.unsplash.com/random/300x300/?pastry,6')">
+            <div class="item-details">
+              <h3 class="item-title">Camarão - R$9</h3>
+              <p class="item-description">Pastelzinho recheado com camarão ao molho.</p>
+              <div class="item-price">R$ 9,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Camarão', 9, 'https://source.unsplash.com/random/300x300/?pastry,6')">Adicionar</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,7" alt="Aplicação de Catupiry" class="item-image" onclick="openItemModal('Aplicação de Catupiry', 'Adicione catupiry cremoso ao seu pastelzinho.', 'https://source.unsplash.com/random/300x300/?pastry,7')">
+            <div class="item-details">
+              <h3 class="item-title">Aplicação de Catupiry - R$2</h3>
+              <p class="item-description">Adicione catupiry cremoso ao seu pastelzinho.</p>
+              <div class="item-price">R$ 2,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Aplicação de Catupiry', 2, 'https://source.unsplash.com/random/300x300/?pastry,7')">Adicionar</button>
+              </div>
             </div>
           </div>
         </div>
         
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,2" alt="Cheddar" class="item-image" onclick="openItemModal('Pastelzinho Cheddar', 'Pastelzinho recheado com cheddar derretido e opção de cebola.', 'https://source.unsplash.com/random/300x300/?pastry,2')">
-          <div class="item-details">
-            <h3 class="item-title">Cheddar (com ou sem cebola) - R$6</h3>
-            <p class="item-description">Pastelzinho recheado com cheddar derretido e opção de cebola.</p>
-            <div class="item-price">R$ 6,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Cheddar', 6, 'https://source.unsplash.com/random/300x300/?pastry,2')">Adicionar</button>
+        <div class="section-sweet">
+          <div class="section-title">Doces</div>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,8" alt="Doce de Leite" class="item-image" onclick="openItemModal('Pastelzinho Doce de Leite', 'Pastelzinho recheado com doce de leite cremoso.', 'https://source.unsplash.com/random/300x300/?pastry,8')">
+            <div class="item-details">
+              <h3 class="item-title">Doce de Leite - R$6</h3>
+              <p class="item-description">Pastelzinho recheado com doce de leite cremoso.</p>
+              <div class="item-price">R$ 6,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Doce de Leite', 6, 'https://source.unsplash.com/random/300x300/?pastry,8')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,3" alt="Catupiry" class="item-image" onclick="openItemModal('Pastelzinho Catupiry', 'Pastelzinho recheado com catupiry cremoso e opção de cebola.', 'https://source.unsplash.com/random/300x300/?pastry,3')">
-          <div class="item-details">
-            <h3 class="item-title">Catupiry (com ou sem cebola) - R$6</h3>
-            <p class="item-description">Pastelzinho recheado com catupiry cremoso e opção de cebola.</p>
-            <div class="item-price">R$ 6,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Catupiry', 6, 'https://source.unsplash.com/random/300x300/?pastry,3')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,9" alt="Romeu e Julieta" class="item-image" onclick="openItemModal('Pastelzinho Romeu e Julieta', 'Pastelzinho recheado com queijo e goiabada.', 'https://source.unsplash.com/random/300x300/?pastry,9')">
+            <div class="item-details">
+              <h3 class="item-title">Romeu e Julieta - R$6</h3>
+              <p class="item-description">Pastelzinho recheado com queijo e goiabada.</p>
+              <div class="item-price">R$ 6,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Romeu e Julieta', 6, 'https://source.unsplash.com/random/300x300/?pastry,9')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,4" alt="Carne Moída" class="item-image" onclick="openItemModal('Pastelzinho Carne Moída', 'Pastelzinho recheado com carne moída temperada.', 'https://source.unsplash.com/random/300x300/?pastry,4')">
-          <div class="item-details">
-            <h3 class="item-title">Carne Moída - R$7</h3>
-            <p class="item-description">Pastelzinho recheado com carne moída temperada.</p>
-            <div class="item-price">R$ 7,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Carne Moída', 7, 'https://source.unsplash.com/random/300x300/?pastry,4')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,10" alt="Chocolate Preto" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Preto', 'Pastelzinho recheado com chocolate preto.', 'https://source.unsplash.com/random/300x300/?pastry,10')">
+            <div class="item-details">
+              <h3 class="item-title">Chocolate Preto - R$6</h3>
+              <p class="item-description">Pastelzinho recheado com chocolate preto.</p>
+              <div class="item-price">R$ 6,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Chocolate Preto', 6, 'https://source.unsplash.com/random/300x300/?pastry,10')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,5" alt="Carne Seca" class="item-image" onclick="openItemModal('Pastelzinho Carne Seca', 'Pastelzinho recheado com carne seca desfiada.', 'https://source.unsplash.com/random/300x300/?pastry,5')">
-          <div class="item-details">
-            <h3 class="item-title">Carne Seca - R$7</h3>
-            <p class="item-description">Pastelzinho recheado com carne seca desfiada.</p>
-            <div class="item-price">R$ 7,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Carne Seca', 7, 'https://source.unsplash.com/random/300x300/?pastry,5')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,11" alt="Chocolate Branco" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Branco', 'Pastelzinho recheado com chocolate branco.', 'https://source.unsplash.com/random/300x300/?pastry,11')">
+            <div class="item-details">
+              <h3 class="item-title">Chocolate Branco - R$6</h3>
+              <p class="item-description">Pastelzinho recheado com chocolate branco.</p>
+              <div class="item-price">R$ 6,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Chocolate Branco', 6, 'https://source.unsplash.com/random/300x300/?pastry,11')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,6" alt="Camarão" class="item-image" onclick="openItemModal('Pastelzinho Camarão', 'Pastelzinho recheado com camarão ao molho.', 'https://source.unsplash.com/random/300x300/?pastry,6')">
-          <div class="item-details">
-            <h3 class="item-title">Camarão - R$9</h3>
-            <p class="item-description">Pastelzinho recheado com camarão ao molho.</p>
-            <div class="item-price">R$ 9,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Camarão', 9, 'https://source.unsplash.com/random/300x300/?pastry,6')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,12" alt="Chocolate Misto" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Misto', 'Pastelzinho recheado com chocolate preto e branco.', 'https://source.unsplash.com/random/300x300/?pastry,12')">
+            <div class="item-details">
+              <h3 class="item-title">Chocolate Misto - R$6</h3>
+              <p class="item-description">Pastelzinho recheado com chocolate preto e branco.</p>
+              <div class="item-price">R$ 6,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Chocolate Misto', 6, 'https://source.unsplash.com/random/300x300/?pastry,12')">Adicionar</button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,7" alt="Aplicação de Catupiry" class="item-image" onclick="openItemModal('Aplicação de Catupiry', 'Adicione catupiry cremoso ao seu pastelzinho.', 'https://source.unsplash.com/random/300x300/?pastry,7')">
-          <div class="item-details">
-            <h3 class="item-title">Aplicação de Catupiry - R$2</h3>
-            <p class="item-description">Adicione catupiry cremoso ao seu pastelzinho.</p>
-            <div class="item-price">R$ 2,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Aplicação de Catupiry', 2, 'https://source.unsplash.com/random/300x300/?pastry,7')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Adicionando a parte Doce -->
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,8" alt="Doce de Leite" class="item-image" onclick="openItemModal('Pastelzinho Doce de Leite', 'Pastelzinho recheado com doce de leite cremoso.', 'https://source.unsplash.com/random/300x300/?pastry,8')">
-          <div class="item-details">
-            <h3 class="item-title">Doce de Leite - R$6</h3>
-            <p class="item-description">Pastelzinho recheado com doce de leite cremoso.</p>
-            <div class="item-price">R$ 6,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Doce de Leite', 6, 'https://source.unsplash.com/random/300x300/?pastry,8')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,9" alt="Romeu e Julieta" class="item-image" onclick="openItemModal('Pastelzinho Romeu e Julieta', 'Pastelzinho recheado com queijo e goiabada.', 'https://source.unsplash.com/random/300x300/?pastry,9')">
-          <div class="item-details">
-            <h3 class="item-title">Romeu e Julieta - R$6</h3>
-            <p class="item-description">Pastelzinho recheado com queijo e goiabada.</p>
-            <div class="item-price">R$ 6,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Romeu e Julieta', 6, 'https://source.unsplash.com/random/300x300/?pastry,9')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,10" alt="Chocolate Preto" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Preto', 'Pastelzinho recheado com chocolate preto.', 'https://source.unsplash.com/random/300x300/?pastry,10')">
-          <div class="item-details">
-            <h3 class="item-title">Chocolate Preto - R$6</h3>
-            <p class="item-description">Pastelzinho recheado com chocolate preto.</p>
-            <div class="item-price">R$ 6,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Chocolate Preto', 6, 'https://source.unsplash.com/random/300x300/?pastry,10')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,11" alt="Chocolate Branco" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Branco', 'Pastelzinho recheado com chocolate branco.', 'https://source.unsplash.com/random/300x300/?pastry,11')">
-          <div class="item-details">
-            <h3 class="item-title">Chocolate Branco - R$6</h3>
-            <p class="item-description">Pastelzinho recheado com chocolate branco.</p>
-            <div class="item-price">R$ 6,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Chocolate Branco', 6, 'https://source.unsplash.com/random/300x300/?pastry,11')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,12" alt="Chocolate Misto" class="item-image" onclick="openItemModal('Pastelzinho Chocolate Misto', 'Pastelzinho recheado com chocolate preto e branco.', 'https://source.unsplash.com/random/300x300/?pastry,12')">
-          <div class="item-details">
-            <h3 class="item-title">Chocolate Misto - R$6</h3>
-            <p class="item-description">Pastelzinho recheado com chocolate preto e branco.</p>
-            <div class="item-price">R$ 6,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Chocolate Misto', 6, 'https://source.unsplash.com/random/300x300/?pastry,12')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?pastry,13" alt="Nutella" class="item-image" onclick="openItemModal('Pastelzinho Nutella', 'Pastelzinho recheado com Nutella.', 'https://source.unsplash.com/random/300x300/?pastry,13')">
-          <div class="item-details">
-            <h3 class="item-title">Nutella - R$7</h3>
-            <p class="item-description">Pastelzinho recheado com Nutella.</p>
-            <div class="item-price">R$ 7,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Nutella', 7, 'https://source.unsplash.com/random/300x300/?pastry,13')">Adicionar</button>
+          
+          <div class="item">
+            <img src="https://source.unsplash.com/random/300x300/?pastry,13" alt="Nutella" class="item-image" onclick="openItemModal('Pastelzinho Nutella', 'Pastelzinho recheado com Nutella.', 'https://source.unsplash.com/random/300x300/?pastry,13')">
+            <div class="item-details">
+              <h3 class="item-title">Nutella - R$7</h3>
+              <p class="item-description">Pastelzinho recheado com Nutella.</p>
+              <div class="item-price">R$ 7,00</div>
+              <div class="item-actions">
+                <button class="add-to-cart" onclick="openNotesModal('Pastelzinho Nutella', 7, 'https://source.unsplash.com/random/300x300/?pastry,13')">Adicionar</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1606,73 +1646,205 @@
         <div class="category-header">Cervejas</div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,1" alt="Stella" class="item-image" onclick="openItemModal('Cerveja Longneck Stella/Budweiser/Eisenbahn', 'Cerveja longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,1')">
+          <img src="https://source.unsplash.com/random/300x300/?beer,1" alt="Stella" class="item-image" onclick="openItemModal('Stella Artois Longneck', 'Cerveja Longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,1')">
           <div class="item-details">
-            <h3 class="item-title">Stella, Budweiser ou Eisenbahn Longneck - R$9</h3>
-            <p class="item-description">Cerveja longneck 355ml.</p>
-            <div class="item-price">R$ 9,00</div>
-            <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Cerveja Longneck Stella/Budweiser/Eisenbahn', 9, 'https://source.unsplash.com/random/300x300/?beer,1')">Adicionar</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,2" alt="Heineken" class="item-image" onclick="openItemModal('Cerveja Longneck Heineken/Corona', 'Cerveja longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,2')">
-          <div class="item-details">
-            <h3 class="item-title">Heineken, Heineken Zero ou Corona Longneck - R$10</h3>
-            <p class="item-description">Cerveja longneck 355ml.</p>
+            <h3 class="item-title">Stella - R$10</h3>
+            <p class="item-description">Cerveja Longneck 355ml.</p>
             <div class="item-price">R$ 10,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Cerveja Longneck Heineken/Corona', 10, 'https://source.unsplash.com/random/300x300/?beer,2')">Adicionar</button>
+              <button class="add-to-cart" onclick="openNotesModal('Stella Artois Longneck', 10, 'https://source.unsplash.com/random/300x300/?beer,1')">Adicionar</button>
             </div>
           </div>
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,3" alt="Cerveja 600ml" class="item-image" onclick="openItemModal('Cerveja 600ml Variadas', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,3')">
+          <img src="https://source.unsplash.com/random/300x300/?beer,2" alt="Budweiser" class="item-image" onclick="openItemModal('Budweiser Longneck', 'Cerveja Longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,2')">
           <div class="item-details">
-            <h3 class="item-title">Stella, Original, Spaten, Eisenbahn, Budweiser, Duplo Malte ou Serramalte 600ml - R$13</h3>
+            <h3 class="item-title">Budweiser - R$10</h3>
+            <p class="item-description">Cerveja Longneck 355ml.</p>
+            <div class="item-price">R$ 10,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Budweiser Longneck', 10, 'https://source.unsplash.com/random/300x300/?beer,2')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,3" alt="Eisenbahn" class="item-image" onclick="openItemModal('Eisenbahn Longneck', 'Cerveja Longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,3')">
+          <div class="item-details">
+            <h3 class="item-title">Eisenbahn - R$10</h3>
+            <p class="item-description">Cerveja Longneck 355ml.</p>
+            <div class="item-price">R$ 10,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Eisenbahn Longneck', 10, 'https://source.unsplash.com/random/300x300/?beer,3')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,4" alt="Heineken" class="item-image" onclick="openItemModal('Heineken Longneck', 'Cerveja Longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,4')">
+          <div class="item-details">
+            <h3 class="item-title">Heineken - R$10</h3>
+            <p class="item-description">Cerveja Longneck 355ml.</p>
+            <div class="item-price">R$ 10,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Heineken Longneck', 10, 'https://source.unsplash.com/random/300x300/?beer,4')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,5" alt="Heineken Zero" class="item-image" onclick="openItemModal('Heineken Zero Longneck', 'Cerveja Longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,5')">
+          <div class="item-details">
+            <h3 class="item-title">Heineken Zero - R$10</h3>
+            <p class="item-description">Cerveja Longneck 355ml.</p>
+            <div class="item-price">R$ 10,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Heineken Zero Longneck', 10, 'https://source.unsplash.com/random/300x300/?beer,5')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,6" alt="Corona" class="item-image" onclick="openItemModal('Corona Longneck', 'Cerveja Longneck 355ml.', 'https://source.unsplash.com/random/300x300/?beer,6')">
+          <div class="item-details">
+            <h3 class="item-title">Corona - R$10</h3>
+            <p class="item-description">Cerveja Longneck 355ml.</p>
+            <div class="item-price">R$ 10,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Corona Longneck', 10, 'https://source.unsplash.com/random/300x300/?beer,6')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,7" alt="Stella 600ml" class="item-image" onclick="openItemModal('Stella Artois 600ml', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,7')">
+          <div class="item-details">
+            <h3 class="item-title">Stella - R$13</h3>
             <p class="item-description">Cerveja 600ml.</p>
             <div class="item-price">R$ 13,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Cerveja 600ml Variadas', 13, 'https://source.unsplash.com/random/300x300/?beer,3')">Adicionar</button>
+              <button class="add-to-cart" onclick="openNotesModal('Stella Artois 600ml', 13, 'https://source.unsplash.com/random/300x300/?beer,7')">Adicionar</button>
             </div>
           </div>
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,4" alt="Heineken 600ml" class="item-image" onclick="openItemModal('Heineken 600ml', 'Cerveja Heineken 600ml.', 'https://source.unsplash.com/random/300x300/?beer,4')">
+          <img src="https://source.unsplash.com/random/300x300/?beer,8" alt="Original 600ml" class="item-image" onclick="openItemModal('Original 600ml', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,8')">
+          <div class="item-details">
+            <h3 class="item-title">Original - R$13</h3>
+            <p class="item-description">Cerveja 600ml.</p>
+            <div class="item-price">R$ 13,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Original 600ml', 13, 'https://source.unsplash.com/random/300x300/?beer,8')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,9" alt="Spaten 600ml" class="item-image" onclick="openItemModal('Spaten 600ml', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,9')">
+          <div class="item-details">
+            <h3 class="item-title">Spaten - R$13</h3>
+            <p class="item-description">Cerveja 600ml.</p>
+            <div class="item-price">R$ 13,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Spaten 600ml', 13, 'https://source.unsplash.com/random/300x300/?beer,9')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,10" alt="Eisenbahn 600ml" class="item-image" onclick="openItemModal('Eisenbahn 600ml', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,10')">
+          <div class="item-details">
+            <h3 class="item-title">Eisenbahn - R$13</h3>
+            <p class="item-description">Cerveja 600ml.</p>
+            <div class="item-price">R$ 13,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Eisenbahn 600ml', 13, 'https://source.unsplash.com/random/300x300/?beer,10')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,11" alt="Budweiser 600ml" class="item-image" onclick="openItemModal('Budweiser 600ml', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,11')">
+          <div class="item-details">
+            <h3 class="item-title">Budweiser - R$13</h3>
+            <p class="item-description">Cerveja 600ml.</p>
+            <div class="item-price">R$ 13,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Budweiser 600ml', 13, 'https://source.unsplash.com/random/300x300/?beer,11')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,12" alt="Duplo Malte 600ml" class="item-image" onclick="openItemModal('Duplo Malte 600ml', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,12')">
+          <div class="item-details">
+            <h3 class="item-title">Duplo Malte - R$13</h3>
+            <p class="item-description">Cerveja 600ml.</p>
+            <div class="item-price">R$ 13,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Duplo Malte 600ml', 13, 'https://source.unsplash.com/random/300x300/?beer,12')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,13" alt="Serramalte 600ml" class="item-image" onclick="openItemModal('Serramalte 600ml', 'Cerveja 600ml.', 'https://source.unsplash.com/random/300x300/?beer,13')">
+          <div class="item-details">
+            <h3 class="item-title">Serramalte - R$13</h3>
+            <p class="item-description">Cerveja 600ml.</p>
+            <div class="item-price">R$ 13,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Serramalte 600ml', 13, 'https://source.unsplash.com/random/300x300/?beer,13')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,14" alt="Heineken 600ml" class="item-image" onclick="openItemModal('Heineken 600ml', 'Cerveja Heineken 600ml.', 'https://source.unsplash.com/random/300x300/?beer,14')">
           <div class="item-details">
             <h3 class="item-title">Heineken 600ml - R$14</h3>
             <p class="item-description">Cerveja Heineken 600ml.</p>
             <div class="item-price">R$ 14,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Heineken 600ml', 14, 'https://source.unsplash.com/random/300x300/?beer,4')">Adicionar</button>
+              <button class="add-to-cart" onclick="openNotesModal('Heineken 600ml', 14, 'https://source.unsplash.com/random/300x300/?beer,14')">Adicionar</button>
             </div>
           </div>
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,5" alt="Colorado" class="item-image" onclick="openItemModal('Colorado 600ml', 'Cerveja artesanal Colorado 600ml.', 'https://source.unsplash.com/random/300x300/?beer,5')">
+          <img src="https://source.unsplash.com/random/300x300/?beer,15" alt="Colorado 600ml" class="item-image" onclick="openItemModal('Colorado 600ml', 'Cerveja artesanal Colorado 600ml.', 'https://source.unsplash.com/random/300x300/?beer,15')">
           <div class="item-details">
             <h3 class="item-title">Colorado 600ml - R$20</h3>
             <p class="item-description">Cerveja artesanal Colorado 600ml.</p>
             <div class="item-price">R$ 20,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Colorado 600ml', 20, 'https://source.unsplash.com/random/300x300/?beer,5')">Adicionar</button>
+              <button class="add-to-cart" onclick="openNotesModal('Colorado 600ml', 20, 'https://source.unsplash.com/random/300x300/?beer,15')">Adicionar</button>
             </div>
           </div>
         </div>
         
         <div class="item">
-          <img src="https://source.unsplash.com/random/300x300/?beer,6" alt="Latão" class="item-image" onclick="openItemModal('Latão Brahma/Antarctica', 'Cerveja em lata 473ml.', 'https://source.unsplash.com/random/300x300/?beer,6')">
+          <img src="https://source.unsplash.com/random/300x300/?beer,16" alt="Brahma" class="item-image" onclick="openItemModal('Brahma Latão', 'Cerveja em latão 473ml.', 'https://source.unsplash.com/random/300x300/?beer,16')">
           <div class="item-details">
-            <h3 class="item-title">Latão de Brahma ou Antarctica - R$8</h3>
-            <p class="item-description">Cerveja em lata 473ml.</p>
+            <h3 class="item-title">Brahma - R$8</h3>
+            <p class="item-description">Cerveja em latão 473ml.</p>
             <div class="item-price">R$ 8,00</div>
             <div class="item-actions">
-              <button class="add-to-cart" onclick="openNotesModal('Latão Brahma/Antarctica', 8, 'https://source.unsplash.com/random/300x300/?beer,6')">Adicionar</button>
+              <button class="add-to-cart" onclick="openNotesModal('Brahma Latão', 8, 'https://source.unsplash.com/random/300x300/?beer,16')">Adicionar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="item">
+          <img src="https://source.unsplash.com/random/300x300/?beer,17" alt="Antártica" class="item-image" onclick="openItemModal('Antártica Latão', 'Cerveja em latão 473ml.', 'https://source.unsplash.com/random/300x300/?beer,17')">
+          <div class="item-details">
+            <h3 class="item-title">Antártica - R$8</h3>
+            <p class="item-description">Cerveja em latão 473ml.</p>
+            <div class="item-price">R$ 8,00</div>
+            <div class="item-actions">
+              <button class="add-to-cart" onclick="openNotesModal('Antártica Latão', 8, 'https://source.unsplash.com/random/300x300/?beer,17')">Adicionar</button>
             </div>
           </div>
         </div>
@@ -1839,7 +2011,8 @@
     </div>
   </div>
 
-  <script>
+  
+<script>
     let cart = [];
     let currentItem = null;
     let currentAddons = [];
@@ -1875,7 +2048,7 @@
       const statusElement = document.getElementById('status-text');
       
       // Aberto de domingo a domingo das 19h às 00h
-      if (hours >= 10 || hours < 0) { // 19h (7PM) até 00h (meia-noite)
+      if (hours >= 19 || hours < 0) {
         statusElement.textContent = 'Aberto';
         statusElement.className = 'status open';
         return true;
@@ -1901,7 +2074,7 @@
     }
     
     // Adiciona item ao carrinho
-    function addItem(name, price, image, addonsList = [], notes = '') {
+    function addItem(name, price, image, addonsList = [], notes = '', event = null) {
       let itemName = name;
       let itemPrice = price;
       let addonsDescription = '';
@@ -2370,14 +2543,16 @@
     }
     
     // Rolagem suave para as seções
-    function scrollToSection(sectionId) {
+    function scrollToSection(sectionId, event) {
       const section = document.getElementById(sectionId);
       if (section) {
         // Atualiza a aba ativa
-        document.querySelectorAll('.tab-button').forEach(button => {
-          button.classList.remove('active');
-        });
-        event.target.classList.add('active');
+        if (event && event.target) {
+          document.querySelectorAll('.tab-button').forEach(button => {
+            button.classList.remove('active');
+          });
+          event.target.classList.add('active');
+        }
         
         // Rolagem suave
         window.scrollTo({
@@ -2470,6 +2645,10 @@
         tabsContainer.scrollLeft = 0;
       }
     });
-  </script>
+</script>
+
+
+
+
 </body>
 </html>
