@@ -1077,7 +1077,7 @@
 
 <!-- Pão de Queijo Salgado -->
       <div id="smoothie" class="category">
-        <div class="category-header">Pão de Queijo Salgado</div>
+        <div class="category-header">Salgado</div>
 
 
         
@@ -1169,7 +1169,7 @@
 
 <!-- Pão de Queijo Doce -->
       <div id="smoothie" class="category">
-        <div class="category-header">Pão de Queijo Doce</div>
+        <div class="category-header">Doce</div>
 
 
         
@@ -1251,6 +1251,14 @@
       <!-- Pastelzinho -->
       <div id="pastelzinho" class="category">
         <div class="category-header">Pastelzinho</div>
+
+
+
+<!-- Pastelzinho Salgado -->
+      <div id="smoothie" class="category">
+        <div class="category-header">Salgado</div>
+
+        
         
         <div class="item">
           <img src="https://source.unsplash.com/random/300x300/?pastry,1" alt="Queijo" class="item-image" onclick="openItemModal('Pastelzinho Queijo', 'Pastelzinho recheado com queijo derretido.', 'https://source.unsplash.com/random/300x300/?pastry,1')">
@@ -1335,6 +1343,16 @@
             </div>
           </div>
         </div>
+
+
+
+<!-- Pastelzinho Doce -->
+      <div id="smoothie" class="category">
+        <div class="category-header">Doce</div>
+
+
+
+        
         
         <!-- Adicionando a parte Doce -->
         <div class="item">
