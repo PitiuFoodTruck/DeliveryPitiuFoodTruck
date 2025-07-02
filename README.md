@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
@@ -903,6 +904,15 @@
       .payment-options {
         flex-wrap: nowrap;
       }
+      
+      /* Ajustes para o carrinho em tablets */
+      .cart-section {
+        max-height: 50vh;
+      }
+      
+      .cart-items {
+        max-height: 200px;
+      }
     }
     
     /* Responsividade para desktops */
@@ -928,6 +938,7 @@
         max-height: none;
         transform: none !important;
         overflow-y: auto;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       }
       
       .item-image {
@@ -945,6 +956,39 @@
         position: sticky;
         align-self: flex-start;
         overflow-y: auto;
+      }
+      
+      /* Garante que os botões do carrinho sejam visíveis */
+      .cart-actions {
+        position: sticky;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 0.8rem 0;
+        margin-bottom: -0.8rem;
+      }
+    }
+    
+    /* Ajustes específicos para mobile */
+    @media (max-width: 599px) {
+      /* Garante que os botões do carrinho sejam visíveis */
+      .cart-section {
+        padding-bottom: 80px; /* Espaço extra para os botões */
+      }
+      
+      .cart-actions {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 0.8rem;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        z-index: 91;
+      }
+      
+      /* Ajusta a altura do container de itens do carrinho */
+      .cart-items {
+        max-height: calc(40vh - 150px); /* Altura total menos espaço dos botões e outros elementos */
       }
     }
     
@@ -2011,7 +2055,6 @@
     </div>
   </div>
 
-  
 <script>
     let cart = [];
     let currentItem = null;
@@ -2340,6 +2383,15 @@
       }
     }
     
+
+
+
+
+
+
+
+
+
     // Abre o modal de adicionais para hambúrgueres
     function openAddonsModal(name, price, image) {
       currentItem = { name, price, image };
@@ -2646,9 +2698,3 @@
       }
     });
 </script>
-
-
-
-
-</body>
-</html>
