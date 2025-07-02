@@ -69,7 +69,6 @@
       background-color: rgba(0, 0, 0, 0.2);
       z-index: -1;
     }
-
 /* Botão de voltar ao topo */
 .back-to-top {
   position: fixed;
@@ -99,13 +98,7 @@
 .back-to-top:hover {
   background-color: #c0392b;
 }
-
-    
-
-
-
-    
-    .header {
+     .header {
       background-color: rgba(34, 34, 34, 0.9);
       color: white;
       text-align: center;
@@ -890,6 +883,58 @@
       box-sizing: border-box;
     }
     
+    .preview-item {
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      width: 100%;
+    }
+    
+    .preview-item-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    
+    .preview-item-name {
+      flex: 2;
+      font-size: 0.9rem;
+      word-break: break-word;
+    }
+    
+    .preview-item-price {
+      flex: 1;
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    
+    .preview-item-remove {
+      color: var(--danger-color);
+      margin-left: 0.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 0.8rem;
+    }
+    
+    .preview-item-quantity {
+      display: flex;
+      align-items: center;
+      margin-top: 0.3rem;
+      width: 100%;
+      justify-content: flex-start;
+    }
+    
+    .preview-item-notes {
+      width: 100%;
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 0.3rem;
+      font-style: italic;
+      word-break: break-word;
+    }
+    
     .preview-actions {
       display: flex;
       justify-content: space-between;
@@ -1000,6 +1045,10 @@
       .cart-actions {
         flex-direction: row;
       }
+      
+      .preview-actions {
+        flex-direction: row;
+      }
     }
     
     /* Responsividade para desktops */
@@ -1053,6 +1102,10 @@
         padding: 0.8rem 0;
         margin-bottom: -0.8rem;
       }
+      
+      .preview-content {
+        max-width: 600px;
+      }
     }
     
     /* Ajustes específicos para mobile */
@@ -1079,6 +1132,10 @@
       /* Ajusta a altura do container de itens do carrinho */
       .cart-items {
         max-height: calc(40vh - 150px); /* Altura total menos espaço dos botões e outros elementos */
+      }
+      
+      .preview-actions {
+        flex-direction: column;
       }
     }
     
@@ -1138,6 +1195,13 @@
       <!-- Hambúrgueres -->
       <div id="hamburgueres" class="category">
         <div class="category-header">Hambúrgueres Artesanais</div>
+
+
+
+
+
+
+
         
         <div class="item">
           <img src="https://source.unsplash.com/random/300x300/?burger,1" alt="Carne no Prato" class="item-image" onclick="openItemModal('Carne no Prato', 'Blend da casa de 180g, queijo prato e mussarela no pão brioche.', 'https://source.unsplash.com/random/300x300/?burger,1')">
@@ -1992,6 +2056,23 @@
       </div>
     </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
     <!-- Carrinho de Compras -->
     <div class="cart-section">
       <h2 class="cart-title">Seu Pedido</h2>
@@ -2377,16 +2458,28 @@
       let summaryHTML = '';
       let total = 0;
       
-      cart.forEach(item => {
+      cart.forEach((item, index) => {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
         
         summaryHTML += `
-          <div class="order-item">
-            <span>${item.quantity}x ${item.name}</span>
-            <span>R$ ${itemTotal.toFixed(2)}</span>
+          <div class="preview-item">
+            <div class="preview-item-row">
+              <div class="preview-item-name">
+                ${item.quantity}x ${item.name}
+                <button class="preview-item-remove" onclick="removeItem(${index}); updatePreviewModal();">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              <div class="preview-item-price">R$ ${itemTotal.toFixed(2)}</div>
+            </div>
+            <div class="preview-item-quantity">
+              <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity - 1}); updatePreviewModal();">-</button>
+              <span class="quantity-value">${item.quantity}</span>
+              <button class="quantity-btn" onclick="updateQuantity(${index}, ${item.quantity + 1}); updatePreviewModal();">+</button>
+            </div>
+            ${item.notes ? `<div class="preview-item-notes">Obs: ${item.notes}</div>` : ''}
           </div>
-          ${item.notes ? `<div class="order-item" style="font-size: 0.8rem; color: #666;">- Obs: ${item.notes}</div>` : ''}
         `;
       });
       
@@ -2399,6 +2492,13 @@
       
       previewItems.innerHTML = summaryHTML;
       previewTotal.textContent = `Total: R$ ${total.toFixed(2)}`;
+    }
+    
+    // Atualiza o modal de prévia do pedido
+    function updatePreviewModal() {
+      if (document.getElementById('preview-modal').style.display === 'block') {
+        openPreviewModal();
+      }
     }
     
     // Fecha o modal de prévia do pedido
@@ -2908,11 +3008,7 @@ backToTopButton.addEventListener('click', () => {
     top: 0,
     behavior: 'smooth'
   });
-});
-
-
-
-  
+})
 </script>
 </body>
 </html>
