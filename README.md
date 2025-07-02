@@ -1072,14 +1072,6 @@
       <!-- Pão de Queijo -->
       <div id="pao-queijo" class="category">
         <div class="category-header">Pão de Queijo Recheado</div>
-
-
-
-<!-- Pão de Queijo Salgado -->
-      <div id="smoothie" class="category">
-        <div class="category-header">Salgado</div>
-
-
         
         <div class="item">
           <img src="https://source.unsplash.com/random/300x300/?cheese-bread,1" alt="Sem Recheio" class="item-image" onclick="openItemModal('Pão de Queijo Sem Recheio', 'Pão de queijo tradicional sem recheio.', 'https://source.unsplash.com/random/300x300/?cheese-bread,1')">
@@ -1164,15 +1156,6 @@
             </div>
           </div>
         </div>
-
-
-
-<!-- Pão de Queijo Doce -->
-      <div id="smoothie" class="category">
-        <div class="category-header">Doce</div>
-
-
-        
         
         <!-- Adicionando a parte Doce -->
         <div class="item">
@@ -1251,14 +1234,6 @@
       <!-- Pastelzinho -->
       <div id="pastelzinho" class="category">
         <div class="category-header">Pastelzinho</div>
-
-
-
-<!-- Pastelzinho Salgado -->
-      <div id="smoothie" class="category">
-        <div class="category-header">Salgado</div>
-
-        
         
         <div class="item">
           <img src="https://source.unsplash.com/random/300x300/?pastry,1" alt="Queijo" class="item-image" onclick="openItemModal('Pastelzinho Queijo', 'Pastelzinho recheado com queijo derretido.', 'https://source.unsplash.com/random/300x300/?pastry,1')">
@@ -1343,16 +1318,6 @@
             </div>
           </div>
         </div>
-
-
-
-<!-- Pastelzinho Doce -->
-      <div id="smoothie" class="category">
-        <div class="category-header">Doce</div>
-
-
-
-        
         
         <!-- Adicionando a parte Doce -->
         <div class="item">
@@ -1716,7 +1681,7 @@
 
     <!-- Carrinho de Compras -->
     <div class="cart-section">
-      <h2 class="cart-title">Carrinho (Pedido)</h2>
+      <h2 class="cart-title">Seu Pedido</h2>
       <div id="cart-items" class="cart-items">
         <div class="empty-cart">Seu carrinho está vazio</div>
       </div>
