@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciador - FoodTruck do Pitiu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #d35400;
+      --secondary-color: #e67e22;
+      --dark-color: #222;
+      --light-color: #f9f9f9;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1, h2 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .tab-button {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: #f1f1f1;
+      border: none;
+      margin-right: 5px;
+      border-radius: 5px 5px 0 0;
+    }
+    
+    .tab-button.active {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-danger {
+      background-color: #e74c3c;
+      color: white;
+    }
+    
+    .btn-success {
+      background-color: #27ae60;
+      color: white;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    .form-group input, 
+    .form-group textarea, 
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .close-modal {
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .section-title {
+      font-weight: bold;
+      margin: 20px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    
+    .status-message {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      display: block;
+    }
+    
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gerenciador FoodTruck do Pitiu</h1>
+    
+    <div class="tabs">
+      <button class="tab-button active" onclick="openTab('products')">Produtos</button>
+      <button class="tab-button" onclick="openTab('categories')">Categorias</button>
+      <button class="tab-button" onclick="openTab('settings')">Configurações</button>
+      <button class="tab-button" onclick="openTab('export')">Exportar/Importar</button>
+    </div>
+    
+    <div id="status-message" class="status-message"></div>
+    
+    <!-- Tab Produtos -->
+    <div id="products" class="tab-content active">
+      <div class="actions">
+        <button class="btn btn-primary" onclick="openProductModal()">
+          <i class="fas fa-plus"></i> Adicionar Produto
+        </button>
+      </div>
+      
+      <div id="products-list">
+        <!-- Lista de produtos será carregada aqui -->
+      </div>
+    </div>
+    
+    <!-- Tab Categorias -->
+    <div id="categories" class="tab-content">
+      <div class="actions">
+        <button class="btn btn-primary" onclick="openCategoryModal()">
+          <i class="fas fa-plus"></i> Adicionar Categoria
+        </button>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Seção</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="categories-list">
+          <!-- Lista de categorias será carregada aqui -->
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Tab Configurações -->
+    <div id="settings" class="tab-content">
+      <div class="form-group">
+        <label for="business-name">Nome do Estabelecimento</label>
+        <input type="text" id="business-name" placeholder="FoodTruck do Pitiu">
+      </div>
+      
+      <div class="form-group">
+        <label for="business-logo">URL do Logo</label>
+        <input type="text" id="business-logo" placeholder="logotipo1pitiu.png">
+      </div>
+      
+      <div class="form-group">
+        <label for="business-location">Localização</label>
+        <input type="text" id="business-location" placeholder="📍 Praça Saiqui, Vila Valqueire">
+      </div>
+      
+      <div class="form-group">
+        <label for="business-description">Descrição</label>
+        <input type="text" id="business-description" placeholder="🛵 Cardápio impresso::Instagram::Whatsapp: é só clicar ⤵️">
+      </div>
+      
+      <div class="form-group">
+        <label for="whatsapp-number">Número do WhatsApp</label>
+        <input type="text" id="whatsapp-number" placeholder="5521992254487">
+      </div>
+      
+      <div class="form-group">
+        <label for="instagram-url">URL do Instagram</label>
+        <input type="text" id="instagram-url" placeholder="https://www.instagram.com/foodtruckdopitiu/">
+      </div>
+      
+      <div class="form-group">
+        <label for="menu-url">URL do Cardápio Impresso</label>
+        <input type="text" id="menu-url" placeholder="https://www.canva.com/design/DAFiXrcSAYE/SyFYhg2E6JroZstX3cA_hA/view?website#4">
+      </div>
+      
+      <div class="form-group">
+        <label for="background-image">URL da Imagem de Fundo</label>
+        <input type="text" id="background-image" placeholder="backgroundfoodtruckpitiu.png">
+      </div>
+      
+      <div class="actions">
+        <button class="btn btn-success" onclick="saveSettings()">Salvar Configurações</button>
+      </div>
+    </div>
+    
+    <!-- Tab Exportar/Importar -->
+    <div id="export" class="tab-content">
+      <div class="form-group">
+        <label>Exportar Dados</label>
+        <button class="btn btn-primary" onclick="exportData()">
+          <i class="fas fa-download"></i> Exportar Tudo (JSON)
+        </button>
+      </div>
+      
+      <div class="form-group">
+        <label for="import-data">Importar Dados (JSON)</label>
+        <textarea id="import-data" rows="10" placeholder="Cole o JSON aqui"></textarea>
+      </div>
+      
+      <div class="actions">
+        <button class="btn btn-success" onclick="importData()">
+          <i class="fas fa-upload"></i> Importar Dados
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de Produto -->
+  <div id="product-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="product-modal-title">Adicionar Produto</h2>
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="product-name">Nome do Produto</label>
+        <input type="text" id="product-name" placeholder="Ex: Cheese Bacon">
+      </div>
+      
+      <div class="form-group">
+        <label for="product-description">Descrição</label>
+        <textarea id="product-description" placeholder="Ex: Blend da casa de 180g, bacon, queijo prato, mussarela e maionese da casa no pão brioche."></textarea>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="product-price">Preço (R$)</label>
+          <input type="number" id="product-price" step="0.01" placeholder="Ex: 26.00">
+        </div>
+        
+        <div class="form-group">
+          <label for="product-category">Categoria</label>
+          <select id="product-category">
+            <!-- Categorias serão preenchidas via JavaScript -->
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="product-image">URL da Imagem</label>
+        <input type="text" id="product-image" placeholder="Ex: https://source.unsplash.com/random/300x300/?burger,4">
+      </div>
+      
+      <div class="form-group">
+        <label for="product-section">Seção (opcional)</label>
+        <select id="product-section">
+          <option value="">Nenhuma</option>
+          <option value="salty">Salgado</option>
+          <option value="sweet">Doce</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="product-addons">Tem adicionais?</label>
+        <select id="product-addons">
+          <option value="false">Não</option>
+          <option value="true">Sim (para hambúrgueres)</option>
+        </select>
+      </div>
+      
+      <div class="actions">
+        <button class="btn btn-success" onclick="saveProduct()">Salvar Produto</button>
+        <button class="btn btn-danger" onclick="closeModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de Categoria -->
+  <div id="category-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="category-modal-title">Adicionar Categoria</h2>
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="category-name">Nome da Categoria</label>
+        <input type="text" id="category-name" placeholder="Ex: Hambúrgueres Artesanais">
+      </div>
+      
+      <div class="form-group">
+        <label for="category-id">ID (sem espaços ou acentos)</label>
+        <input type="text" id="category-id" placeholder="Ex: hamburgueres">
+      </div>
+      
+      <div class="form-group">
+        <label for="category-section">Seção (opcional)</label>
+        <select id="category-section">
+          <option value="">Nenhuma</option>
+          <option value="salty">Salgado</option>
+          <option value="sweet">Doce</option>
+        </select>
+      </div>
+      
+      <div class="actions">
+        <button class="btn btn-success" onclick="saveCategory()">Salvar Categoria</button>
+        <button class="btn btn-danger" onclick="closeModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Dados iniciais
+    let products = [];
+    let categories = [];
+    let settings = {};
+    let editingId = null;
+    
+    // Carrega os dados do localStorage
+    function loadData() {
+      products = JSON.parse(localStorage.getItem('products')) || [];
+      categories = JSON.parse(localStorage.getItem('categories')) || [];
+      settings = JSON.parse(localStorage.getItem('settings')) || {};
+      
+      // Se não houver categorias, cria algumas padrão
+      if (categories.length === 0) {
+        categories = [
+          { id: 'hamburgueres', name: 'Hambúrgueres Artesanais', section: '' },
+          { id: 'pao-queijo', name: 'Pão de Queijo Recheado', section: '' },
+          { id: 'pastelzinho', name: 'Pastelzinho', section: '' },
+          { id: 'petiscos', name: 'Petiscos', section: '' },
+          { id: 'bebidas', name: 'Bebidas', section: '' },
+          { id: 'smoothie', name: 'Smoothie', section: '' },
+          { id: 'cervejas', name: 'Cervejas', section: '' }
+        ];
+        localStorage.setItem('categories', JSON.stringify(categories));
+      }
+      
+      // Se não houver produtos, cria alguns exemplos
+      if (products.length === 0) {
+        products = [
+          {
+            id: 'cheese-bacon',
+            name: 'Cheese Bacon',
+            description: 'Blend da casa de 180g, bacon, queijo prato, mussarela e maionese da casa no pão brioche.',
+            price: 26,
+            category: 'hamburgueres',
+            image: 'https://source.unsplash.com/random/300x300/?burger,4',
+            section: '',
+            hasAddons: true
+          },
+          {
+            id: 'frango-catupiry',
+            name: 'Frango com Catupiry',
+            description: 'Frango desfiado com catupiry cremoso.',
+            price: 18,
+            category: 'pao-queijo',
+            image: 'https://source.unsplash.com/random/300x300/?cheese-bread,2',
+            section: 'salty',
+            hasAddons: false
+          }
+        ];
+        localStorage.setItem('products', JSON.stringify(products));
+      }
+      
+      // Se não houver configurações, cria padrão
+      if (Object.keys(settings).length === 0) {
+        settings = {
+          businessName: '𝙁𝙊𝙊𝘿𝙏𝙍𝙐𝘾𝙆 𝘿𝙊 𝙋𝙄𝙏𝙄𝙐',
+          businessLogo: 'logotipo1pitiu.png',
+          businessLocation: '📍 Praça Saiqui, Vila Valqueire',
+          businessDescription: '🛵 Cardápio impresso::Instagram::Whatsapp: é só clicar ⤵️',
+          whatsappNumber: '5521992254487',
+          instagramUrl: 'https://www.instagram.com/foodtruckdopitiu/',
+          menuUrl: 'https://www.canva.com/design/DAFiXrcSAYE/SyFYhg2E6JroZstX3cA_hA/view?website#4',
+          backgroundImage: 'backgroundfoodtruckpitiu.png'
+        };
+        localStorage.setItem('settings', JSON.stringify(settings));
+      }
+      
+      // Atualiza a UI
+      updateProductsList();
+      updateCategoriesList();
+      loadSettings();
+    }
+    
+    // Salva os produtos no localStorage
+    function saveProducts() {
+      localStorage.setItem('products', JSON.stringify(products));
+    }
+    
+    // Salva as categorias no localStorage
+    function saveCategories() {
+      localStorage.setItem('categories', JSON.stringify(categories));
+    }
+    
+    // Salva as configurações no localStorage
+    function saveSettings() {
+      settings = {
+        businessName: document.getElementById('business-name').value,
+        businessLogo: document.getElementById('business-logo').value,
+        businessLocation: document.getElementById('business-location').value,
+        businessDescription: document.getElementById('business-description').value,
+        whatsappNumber: document.getElementById('whatsapp-number').value,
+        instagramUrl: document.getElementById('instagram-url').value,
+        menuUrl: document.getElementById('menu-url').value,
+        backgroundImage: document.getElementById('background-image').value
+      };
+      
+      localStorage.setItem('settings', JSON.stringify(settings));
+      showStatus('Configurações salvas com sucesso!', 'success');
+    }
+    
+    // Carrega as configurações na UI
+    function loadSettings() {
+      document.getElementById('business-name').value = settings.businessName || '';
+      document.getElementById('business-logo').value = settings.businessLogo || '';
+      document.getElementById('business-location').value = settings.businessLocation || '';
+      document.getElementById('business-description').value = settings.businessDescription || '';
+      document.getElementById('whatsapp-number').value = settings.whatsappNumber || '';
+      document.getElementById('instagram-url').value = settings.instagramUrl || '';
+      document.getElementById('menu-url').value = settings.menuUrl || '';
+      document.getElementById('background-image').value = settings.backgroundImage || '';
+    }
+    
+    // Atualiza a lista de produtos na UI
+    function updateProductsList() {
+      const productsList = document.getElementById('products-list');
+      productsList.innerHTML = '';
+      
+      // Agrupa produtos por categoria
+      const productsByCategory = {};
+      products.forEach(product => {
+        if (!productsByCategory[product.category]) {
+          productsByCategory[product.category] = [];
+        }
+        productsByCategory[product.category].push(product);
+      });
+      
+      // Cria uma seção para cada categoria
+      for (const categoryId in productsByCategory) {
+        const category = categories.find(c => c.id === categoryId) || { name: 'Sem Categoria' };
+        const categoryProducts = productsByCategory[categoryId];
+        
+        const categorySection = document.createElement('div');
+        categorySection.className = 'category-section';
+        
+        const title = document.createElement('h2');
+        title.textContent = category.name;
+        categorySection.appendChild(title);
+        
+        const table = document.createElement('table');
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Preço</th>
+              <th>Seção</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="products-${categoryId}">
+          </tbody>
+        `;
+        
+        const tbody = table.querySelector(`#products-${categoryId}`);
+        
+        categoryProducts.forEach(product => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${product.name}</td>
+            <td>${product.description}</td>
+            <td>R$ ${product.price.toFixed(2)}</td>
+            <td>${product.section === 'salty' ? 'Salgado' : product.section === 'sweet' ? 'Doce' : '-'}</td>
+            <td>
+              <button class="btn btn-primary" onclick="editProduct('${product.id}')">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+        
+        categorySection.appendChild(table);
+        productsList.appendChild(categorySection);
+      }
+    }
+    
+    // Atualiza a lista de categorias na UI
+    function updateCategoriesList() {
+      const categoriesList = document.getElementById('categories-list');
+      categoriesList.innerHTML = '';
+      
+      categories.forEach(category => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${category.id}</td>
+          <td>${category.name}</td>
+          <td>${category.section === 'salty' ? 'Salgado' : category.section === 'sweet' ? 'Doce' : '-'}</td>
+          <td>
+            <button class="btn btn-primary" onclick="editCategory('${category.id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-danger" onclick="deleteCategory('${category.id}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        categoriesList.appendChild(row);
+      });
+    }
+    
+    // Abre o modal de produto
+    function openProductModal(productId = null) {
+      const modal = document.getElementById('product-modal');
+      const title = document.getElementById('product-modal-title');
+      const categorySelect = document.getElementById('product-category');
+      
+      // Limpa o select de categorias e preenche com as opções
+      categorySelect.innerHTML = '';
+      categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        categorySelect.appendChild(option);
+      });
+      
+      if (productId) {
+        // Modo edição
+        const product = products.find(p => p.id === productId);
+        if (product) {
+          editingId = productId;
+          title.textContent = 'Editar Produto';
+          
+          document.getElementById('product-name').value = product.name;
+          document.getElementById('product-description').value = product.description;
+          document.getElementById('product-price').value = product.price;
+          document.getElementById('product-category').value = product.category;
+          document.getElementById('product-image').value = product.image;
+          document.getElementById('product-section').value = product.section || '';
+          document.getElementById('product-addons').value = product.hasAddons ? 'true' : 'false';
+        }
+      } else {
+        // Modo adição
+        editingId = null;
+        title.textContent = 'Adicionar Produto';
+        
+        document.getElementById('product-name').value = '';
+        document.getElementById('product-description').value = '';
+        document.getElementById('product-price').value = '';
+        document.getElementById('product-category').value = categories.length > 0 ? categories[0].id : '';
+        document.getElementById('product-image').value = '';
+        document.getElementById('product-section').value = '';
+        document.getElementById('product-addons').value = 'false';
+      }
+      
+      modal.style.display = 'flex';
+    }
+    
+    // Salva um produto (novo ou existente)
+    function saveProduct() {
+      const name = document.getElementById('product-name').value;
+      const description = document.getElementById('product-description').value;
+      const price = parseFloat(document.getElementById('product-price').value);
+      const category = document.getElementById('product-category').value;
+      const image = document.getElementById('product-image').value;
+      const section = document.getElementById('product-section').value;
+      const hasAddons = document.getElementById('product-addons').value === 'true';
+      
+      if (!name || !description || isNaN(price) || !category) {
+        showStatus('Preencha todos os campos obrigatórios!', 'error');
+        return;
+      }
+      
+      if (editingId) {
+        // Atualiza produto existente
+        const index = products.findIndex(p => p.id === editingId);
+        if (index !== -1) {
+          products[index] = {
+            ...products[index],
+            name,
+            description,
+            price,
+            category,
+            image,
+            section,
+            hasAddons
+          };
+        }
+      } else {
+        // Cria novo produto
+        const id = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        products.push({
+          id,
+          name,
+          description,
+          price,
+          category,
+          image,
+          section,
+          hasAddons
+        });
+      }
+      
+      saveProducts();
+      updateProductsList();
+      closeModal();
+      showStatus('Produto salvo com sucesso!', 'success');
+    }
+    
+    // Edita um produto
+    function editProduct(productId) {
+      openProductModal(productId);
+    }
+    
+    // Exclui um produto
+    function deleteProduct(productId) {
+      if (confirm('Tem certeza que deseja excluir este produto?')) {
+        products = products.filter(p => p.id !== productId);
+        saveProducts();
+        updateProductsList();
+        showStatus('Produto excluído com sucesso!', 'success');
+      }
+    }
+    
+    // Abre o modal de categoria
+    function openCategoryModal(categoryId = null) {
+      const modal = document.getElementById('category-modal');
+      const title = document.getElementById('category-modal-title');
+      
+      if (categoryId) {
+        // Modo edição
+        const category = categories.find(c => c.id === categoryId);
+        if (category) {
+          editingId = categoryId;
+          title.textContent = 'Editar Categoria';
+          
+          document.getElementById('category-name').value = category.name;
+          document.getElementById('category-id').value = category.id;
+          document.getElementById('category-section').value = category.section || '';
+        }
+      } else {
+        // Modo adição
+        editingId = null;
+        title.textContent = 'Adicionar Categoria';
+        
+        document.getElementById('category-name').value = '';
+        document.getElementById('category-id').value = '';
+        document.getElementById('category-section').value = '';
+      }
+      
+      modal.style.display = 'flex';
+    }
+    
+    // Salva uma categoria (nova ou existente)
+    function saveCategory() {
+      const name = document.getElementById('category-name').value;
+      const id = document.getElementById('category-id').value;
+      const section = document.getElementById('category-section').value;
+      
+      if (!name || !id) {
+        showStatus('Preencha todos os campos obrigatórios!', 'error');
+        return;
+      }
+      
+      // Valida o ID
+      if (!/^[a-z0-9-]+$/.test(id)) {
+        showStatus('O ID deve conter apenas letras minúsculas, números e hífens!', 'error');
+        return;
+      }
+      
+      if (editingId) {
+        // Atualiza categoria existente
+        const index = categories.findIndex(c => c.id === editingId);
+        if (index !== -1) {
+          categories[index] = {
+            ...categories[index],
+            name,
+            id,
+            section
+          };
+          
+          // Atualiza os produtos que usam esta categoria
+          products.forEach(product => {
+            if (product.category === editingId) {
+              product.category = id;
+            }
+          });
+          saveProducts();
+        }
+      } else {
+        // Verifica se o ID já existe
+        if (categories.some(c => c.id === id)) {
+          showStatus('Já existe uma categoria com este ID!', 'error');
+          return;
+        }
+        
+        // Cria nova categoria
+        categories.push({
+          id,
+          name,
+          section
+        });
+      }
+      
+      saveCategories();
+      updateCategoriesList();
+      updateProductsList();
+      closeModal();
+      showStatus('Categoria salva com sucesso!', 'success');
+    }
+    
+    // Edita uma categoria
+    function editCategory(categoryId) {
+      openCategoryModal(categoryId);
+    }
+    
+    // Exclui uma categoria
+    function deleteCategory(categoryId) {
+      // Verifica se há produtos nesta categoria
+      const productsInCategory = products.filter(p => p.category === categoryId);
+      
+      if (productsInCategory.length > 0) {
+        showStatus('Não é possível excluir esta categoria pois existem produtos vinculados a ela!', 'error');
+        return;
+      }
+      
+      if (confirm('Tem certeza que deseja excluir esta categoria?')) {
+        categories = categories.filter(c => c.id !== categoryId);
+        saveCategories();
+        updateCategoriesList();
+        showStatus('Categoria excluída com sucesso!', 'success');
+      }
+    }
+    
+    // Fecha o modal
+    function closeModal() {
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.style.display = 'none';
+      });
+      editingId = null;
+    }
+    
+    // Alterna entre as abas
+    function openTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+      });
+      
+      document.getElementById(tabId).classList.add('active');
+      document.querySelector(`.tab-button[onclick="openTab('${tabId}')"]`).classList.add('active');
+    }
+    
+    // Mostra mensagem de status
+    function showStatus(message, type) {
+      const statusElement = document.getElementById('status-message');
+      statusElement.textContent = message;
+      statusElement.className = `status-message ${type}`;
+      
+      setTimeout(() => {
+        statusElement.className = 'status-message';
+      }, 3000);
+    }
+    
+    // Exporta todos os dados como JSON
+    function exportData() {
+      const allData = {
+        products,
+        categories,
+        settings
+      };
+      
+      const dataStr = JSON.stringify(allData, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const exportName = 'foodtruck-data.json';
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportName);
+      linkElement.click();
+      
+      showStatus('Dados exportados com sucesso!', 'success');
+    }
+    
+    // Importa dados de um JSON
+    function importData() {
+      const jsonData = document.getElementById('import-data').value;
+      
+      if (!jsonData) {
+        showStatus('Cole o JSON no campo de texto!', 'error');
+        return;
+      }
+      
+      try {
+        const data = JSON.parse(jsonData);
+        
+        if (data.products) {
+          products = data.products;
+          localStorage.setItem('products', JSON.stringify(products));
+        }
+        
+        if (data.categories) {
+          categories = data.categories;
+          localStorage.setItem('categories', JSON.stringify(categories));
+        }
+        
+        if (data.settings) {
+          settings = data.settings;
+          localStorage.setItem('settings', JSON.stringify(settings));
+          loadSettings();
+        }
+        
+        updateProductsList();
+        updateCategoriesList();
+        document.getElementById('import-data').value = '';
+        
+        showStatus('Dados importados com sucesso!', 'success');
+      } catch (e) {
+        showStatus('Erro ao importar dados: JSON inválido!', 'error');
+        console.error(e);
+      }
+    }
+    
+    // Inicializa o gerenciador quando a página carrega
+    window.addEventListener('DOMContentLoaded', () => {
+      loadData();
+    });
+  </script>
+</body>
+</html>
