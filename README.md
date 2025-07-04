@@ -1197,11 +1197,6 @@
         <div class="category-header">Hambúrgueres Artesanais</div>
 
 
-
-
-
-
-
         
         <div class="item">
           <img src="https://source.unsplash.com/random/300x300/?burger,1" alt="Carne no Prato" class="item-image" onclick="openItemModal('Carne no Prato', 'Blend da casa de 180g, queijo prato e mussarela no pão brioche.', 'https://source.unsplash.com/random/300x300/?burger,1')">
@@ -1214,6 +1209,10 @@
             </div>
           </div>
         </div>
+
+
+
+
         
         <div class="item">
           <img src="https://source.unsplash.com/random/300x300/?burger,2" alt="Cheeseburguer" class="item-image" onclick="openItemModal('Cheeseburguer', 'Blend da casa de 180g, queijo prato, mussarela e maionese da casa no pão brioche.', 'https://source.unsplash.com/random/300x300/?burger,2')">
@@ -2055,6 +2054,8 @@
         </div>
       </div>
     </div>
+
+
 
 
 
