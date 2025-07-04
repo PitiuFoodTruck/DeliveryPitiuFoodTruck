@@ -2298,7 +2298,7 @@
       const statusElement = document.getElementById('status-text');
       
       // Aberto de domingo a domingo das 19h às 00h
-      if (hours >= 7 || hours < 0) {
+      if (hours >= 10 || hours < 0) {
         statusElement.textContent = 'Aberto';
         statusElement.className = 'status open';
         return true;
@@ -2868,7 +2868,7 @@
       const encodedMessage = encodeURIComponent(message);
       
       // Abre o WhatsApp
-      window.open(`https://wa.me/5521992254487?text=${encodedMessage}`, '_blank');
+      window.open(`https://wa.me/552180081646?text=${encodedMessage}`, '_blank');
       
       // Fecha o modal e limpa o carrinho
       closeModal();
