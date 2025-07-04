@@ -975,26 +975,96 @@
       text-transform: uppercase;
     }
     
-    /* Estilos para o mapa simulado */
+    /* Estilos para o mapa */
     #map-container {
       margin-top: 10px;
       padding: 10px;
       background-color: #f5f5f5;
       border-radius: 4px;
       text-align: center;
+      position: relative;
+      height: 300px;
+      overflow: hidden;
     }
     
-    #map-container button {
-      margin-top: 5px;
-      padding: 5px 10px;
+    #map {
+      width: 100%;
+      height: 100%;
+      background-color: #e8f4f8;
+      position: relative;
+    }
+    
+    .map-marker {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background-color: red;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+    
+    .map-marker::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: rgba(255, 0, 0, 0.3);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .map-marker.client {
+      background-color: blue;
+    }
+    
+    .map-marker.client::after {
+      background-color: rgba(0, 0, 255, 0.3);
+    }
+    
+    .map-route {
+      position: absolute;
+      height: 2px;
+      background-color: var(--primary-color);
+      transform-origin: 0 0;
+      z-index: 5;
+    }
+    
+    .map-labels {
+      position: absolute;
+      font-size: 10px;
+      background-color: white;
+      padding: 2px 4px;
+      border-radius: 2px;
+      z-index: 20;
+    }
+    
+    #map-info {
+      margin-top: 10px;
+      font-size: 12px;
+      text-align: center;
+    }
+    
+    #map-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    #map-buttons button {
+      padding: 8px 15px;
       background-color: var(--primary-color);
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 0.9rem;
     }
     
-    #map-container button:hover {
+    #map-buttons button:hover {
       background-color: var(--secondary-color);
     }
     
@@ -1190,7 +1260,7 @@
     <img src="logotipo1pitiu.png" alt="FoodTruck do Pitiu" class="logo">
     <h1>𝙁𝙊𝙊𝘿𝙏𝙍𝙐𝘾𝙆 𝘿𝙊 𝙋𝙄𝙏𝙄𝙐</h1>
     <p id="status-text" class="status closed">Fechado</p>
-    <p>📍 Praça Saiqui, Vila Valqueire</p>
+    <p>📍 Praça Saiqui, 157 - Vila Valqueire, Rio de Janeiro - RJ, 21330-320</p>
     <p>🛵 Cardápio impresso::Instagram::Whatsapp: é só clicar ⤵️</p>
     <div class="social-links">
       <a href="https://www.canva.com/design/DAFiXrcSAYE/SyFYhg2E6JroZstX3cA_hA/view?website#4" target="_blank" title="Menuimpresso"><i class="fas fa-book-open"></i></a>
@@ -1292,7 +1362,6 @@
           <input type="text" id="customer-street" placeholder="Rua" required>
           <input type="text" id="customer-number" placeholder="Número" required style="margin-top: 0.5rem;">
           <input type="text" id="customer-complement" placeholder="Complemento (apto/casa/local)" style="margin-top: 0.5rem;">
-          <input type="text" id="customer-zipcode" placeholder="CEP (opcional)" style="margin-top: 0.5rem;">
           <input type="text" id="customer-neighborhood" placeholder="Bairro" required style="margin-top: 0.5rem;">
           <button type="button" onclick="calculateDeliveryFeeByAddress()" style="margin-top: 0.5rem; padding: 0.7rem; background-color: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%;">
             Calcular Taxa de Entrega
@@ -1301,6 +1370,20 @@
         
         <div id="delivery-fee" class="delivery-fee">
           Taxa de entrega: R$ 0,00
+        </div>
+        
+        <div id="map-container" style="display: none;">
+          <div id="map">
+            <!-- Mapa será renderizado aqui -->
+          </div>
+          <div id="map-info">
+            Distância calculada: <span id="distance-display">0</span> km<br>
+            Tempo estimado: <span id="time-display">0</span> min
+          </div>
+          <div id="map-buttons">
+            <button type="button" onclick="confirmDeliveryFee()">Confirmar Taxa</button>
+            <button type="button" onclick="recalculateDeliveryFee()">Recalcular</button>
+          </div>
         </div>
         
         <div class="form-group">
@@ -1417,25 +1500,13 @@
     let currentAddons = [];
     let orderNumber = 1000;
     let deliveryFee = 0;
+    let clientCoords = null;
+    let distance = 0;
     
     // Coordenadas do estabelecimento (Praça Saiqui, 157)
     const ESTABLISHMENT_COORDS = {
         lat: -22.8758,
         lng: -43.3619
-    };
-    
-    // Tabela de taxas por bairro (para quando não conseguir calcular por distância)
-    const neighborhoodFees = {
-        'Vila Valqueire': 5,
-        'Cascadura': 12,
-        'Madureira': 10,
-        'Marechal Hermes': 8,
-        'Bento Ribeiro': 10,
-        'Campinho': 10,
-        'Oswaldo Cruz': 8,
-        'Praça Seca': 15,
-        'Tanque': 15,
-        'Outro': 15
     };
     
     // Lista de adicionais para hambúrgueres
@@ -1738,13 +1809,16 @@
       // Mostra/oculta campos de endereço conforme necessário
       const addressFields = document.getElementById('address-fields');
       const deliveryFeeElement = document.getElementById('delivery-fee');
+      const mapContainer = document.getElementById('map-container');
       
       if (option === 'entrega') {
         addressFields.style.display = 'block';
         deliveryFeeElement.style.display = 'block';
+        mapContainer.style.display = 'none';
       } else if (option === 'retirada' || option === 'local') {
         addressFields.style.display = 'none';
         deliveryFeeElement.style.display = 'none';
+        mapContainer.style.display = 'none';
         deliveryFeeElement.textContent = 'Taxa de entrega: R$ 0,00';
         deliveryFee = 0;
       }
@@ -1807,51 +1881,68 @@
         return 25; // Para distâncias maiores que 20km
     }
 
-    // Função para calcular a taxa de entrega baseada no bairro
-    function calculateFeeByNeighborhood(neighborhood) {
-        return neighborhoodFees[neighborhood] || neighborhoodFees['Outro'];
-    }
-
-    // Função para mostrar um "mapa" simulado
-    function showMapSimulation(distance, clientCoords) {
+    // Função para renderizar o mapa com a rota
+    function renderMap(establishmentCoords, clientCoords, distance) {
         const mapContainer = document.getElementById('map-container');
-        if (!mapContainer) {
-            // Cria o container do mapa se não existir
-            const deliveryFeeElement = document.getElementById('delivery-fee');
-            const newMapContainer = document.createElement('div');
-            newMapContainer.id = 'map-container';
-            newMapContainer.style.marginTop = '10px';
-            newMapContainer.style.padding = '10px';
-            newMapContainer.style.backgroundColor = '#f5f5f5';
-            newMapContainer.style.borderRadius = '4px';
-            newMapContainer.style.textAlign = 'center';
-            deliveryFeeElement.parentNode.insertBefore(newMapContainer, deliveryFeeElement.nextSibling);
-        }
+        const mapElement = document.getElementById('map');
         
-        // Atualiza o conteúdo do mapa
-        mapContainer.innerHTML = `
-            <div style="margin-bottom: 10px; font-weight: bold;">Mapa da Rota (Simulação)</div>
-            <div style="position: relative; height: 150px; background-color: #e8f4f8; border-radius: 4px; overflow: hidden;">
-                <div style="position: absolute; top: 20px; left: 20px; width: 10px; height: 10px; background-color: red; border-radius: 50%;"></div>
-                <div style="position: absolute; top: ${100 - (distance * 3)}px; left: 80%; width: 10px; height: 10px; background-color: blue; border-radius: 50%;"></div>
-                <div style="position: absolute; top: 25px; left: 25px; font-size: 10px;">FoodTruck</div>
-                <div style="position: absolute; top: ${105 - (distance * 3)}px; left: calc(80% + 5px); font-size: 10px;">Seu endereço</div>
-                <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-                    <line x1="25" y1="25" x2="80%" y2="${100 - (distance * 3) + 5}" stroke="#d35400" stroke-width="2" stroke-dasharray="5,5" />
-                </svg>
-            </div>
-            <div style="margin-top: 10px; font-size: 12px;">
-                Distância calculada: ${distance.toFixed(1)} km<br>
-                <button onclick="confirmDeliveryFee()" style="margin-top: 5px; padding: 5px 10px; background-color: #d35400; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirmar Taxa</button>
-            </div>
-        `;
+        // Limpa o mapa anterior
+        mapElement.innerHTML = '';
+        
+        // Cria elementos do mapa
+        const establishmentMarker = document.createElement('div');
+        establishmentMarker.className = 'map-marker';
+        establishmentMarker.style.left = '20%';
+        establishmentMarker.style.top = '20%';
+        
+        const clientMarker = document.createElement('div');
+        clientMarker.className = 'map-marker client';
+        clientMarker.style.left = '80%';
+        clientMarker.style.top = '80%';
+        
+        // Calcula ângulo para a linha de rota
+        const angle = Math.atan2(80 - 20, 80 - 20) * 180 / Math.PI;
+        const length = Math.sqrt(Math.pow(80 - 20, 2) + Math.pow(80 - 20, 2));
+        
+        const routeLine = document.createElement('div');
+        routeLine.className = 'map-route';
+        routeLine.style.width = `${length}%`;
+        routeLine.style.left = '20%';
+        routeLine.style.top = '20%';
+        routeLine.style.transform = `rotate(${angle}deg)`;
+        
+        // Adiciona rótulos
+        const establishmentLabel = document.createElement('div');
+        establishmentLabel.className = 'map-labels';
+        establishmentLabel.textContent = 'FoodTruck';
+        establishmentLabel.style.left = '25%';
+        establishmentLabel.style.top = '25%';
+        
+        const clientLabel = document.createElement('div');
+        clientLabel.className = 'map-labels';
+        clientLabel.textContent = 'Seu endereço';
+        clientLabel.style.left = '85%';
+        clientLabel.style.top = '85%';
+        
+        // Adiciona elementos ao mapa
+        mapElement.appendChild(establishmentMarker);
+        mapElement.appendChild(clientMarker);
+        mapElement.appendChild(routeLine);
+        mapElement.appendChild(establishmentLabel);
+        mapElement.appendChild(clientLabel);
+        
+        // Atualiza informações de distância e tempo
+        document.getElementById('distance-display').textContent = distance.toFixed(1);
+        document.getElementById('time-display').textContent = Math.round(distance * 3); // Estimativa de 3 min/km
+        
+        // Mostra o container do mapa
+        mapContainer.style.display = 'block';
     }
 
     // Função para calcular a taxa de entrega baseada no endereço
     function calculateDeliveryFeeByAddress() {
         const street = document.getElementById('customer-street').value;
         const neighborhood = document.getElementById('customer-neighborhood').value;
-        const zipcode = document.getElementById('customer-zipcode').value;
         const deliveryFeeElement = document.getElementById('delivery-fee');
         
         if (!street || !neighborhood) {
@@ -1859,42 +1950,33 @@
             return;
         }
         
-        // Tenta calcular por distância (simulação)
         try {
             // Simula a obtenção de coordenadas do endereço do cliente
-            const clientCoords = getCoordinatesFromAddress(street, neighborhood);
+            clientCoords = getCoordinatesFromAddress(street, neighborhood);
             
             // Calcula a distância
-            const distance = calculateDistance(
+            distance = calculateDistance(
                 ESTABLISHMENT_COORDS.lat, ESTABLISHMENT_COORDS.lng,
                 clientCoords.lat, clientCoords.lng
             );
             
             // Arredonda para 1 casa decimal
-            const roundedDistance = Math.round(distance * 10) / 10;
+            distance = Math.round(distance * 10) / 10;
             
             // Calcula a taxa de entrega
-            deliveryFee = calculateFeeByDistance(roundedDistance);
+            deliveryFee = calculateFeeByDistance(distance);
             
             // Atualiza a exibição
             deliveryFeeElement.innerHTML = `
-                Distância estimada: ${roundedDistance} km<br>
-                Taxa de entrega: R$ ${deliveryFee.toFixed(2)}
+                Distância estimada: ${distance.toFixed(1)} km<br>
+                Taxa de entrega calculada: R$ ${deliveryFee.toFixed(2)}
             `;
             
-            // Mostra o "mapa" (simulado)
-            showMapSimulation(roundedDistance, clientCoords);
+            // Renderiza o mapa com a rota
+            renderMap(ESTABLISHMENT_COORDS, clientCoords, distance);
         } catch (e) {
-            // Se houver erro no cálculo por distância, usa a tabela por bairro
-            console.error('Erro ao calcular distância, usando tabela por bairro:', e);
-            deliveryFee = calculateFeeByNeighborhood(neighborhood);
-            deliveryFeeElement.textContent = `Taxa de entrega (por bairro): R$ ${deliveryFee.toFixed(2)}`;
-            
-            // Remove o mapa se existir
-            const mapContainer = document.getElementById('map-container');
-            if (mapContainer) {
-                mapContainer.remove();
-            }
+            console.error('Erro ao calcular distância:', e);
+            alert('Não foi possível calcular a distância. Por favor, verifique o endereço e tente novamente.');
         }
         
         // Atualiza o total do pedido
@@ -1906,13 +1988,14 @@
         const deliveryFeeElement = document.getElementById('delivery-fee');
         deliveryFeeElement.innerHTML = `Taxa de entrega confirmada: R$ ${deliveryFee.toFixed(2)}`;
         
-        // Remove o mapa simulado
-        const mapContainer = document.getElementById('map-container');
-        if (mapContainer) {
-            mapContainer.remove();
-        }
-        
+        // Atualiza o total do pedido
         updateOrderTotal();
+    }
+    
+    // Função para recalculcar a taxa de entrega
+    function recalculateDeliveryFee() {
+        document.getElementById('map-container').style.display = 'none';
+        calculateDeliveryFeeByAddress();
     }
     
     // Atualiza o total do pedido (subtotal + taxa)
@@ -2122,7 +2205,7 @@
       let subtotal = 0;
       let orderItems = '';
       
-      cart.forEach(item => {
+      cart.forEach((item, index) => {
         const itemTotal = item.price * item.quantity;
         subtotal += itemTotal;
         orderItems += `${item.quantity}x ${item.name} - R$ ${itemTotal.toFixed(2)}\n`;
@@ -2147,7 +2230,8 @@
         if (complement) message += ` - ${complement}`;
         message += `\n${neighborhood}\n`;
         if (zipcode) message += `CEP: ${zipcode}\n`;
-        message += `\n*Taxa de entrega:* R$ ${deliveryFee.toFixed(2)}\n\n`;
+        message += `\n*Distância:* ${distance.toFixed(1)} km\n`;
+        message += `*Taxa de entrega:* R$ ${deliveryFee.toFixed(2)}\n\n`;
       } else if (deliveryOption === 'retirada') {
         message += `*Tipo:* Retirada\n\n`;
       } else if (deliveryOption === 'local') {
