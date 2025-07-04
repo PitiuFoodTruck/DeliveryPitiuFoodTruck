@@ -1541,20 +1541,6 @@
       { name: "Não incluir nada", price: 0.00 }
     ];
     
-    // Tabela de multiplicadores para rotas realistas por bairro
-    const routeMultipliers = {
-        'Vila Valqueire': 1.0,
-        'Cascadura': 1.3,
-        'Madureira': 1.4,
-        'Marechal Hermes': 1.2,
-        'Bento Ribeiro': 1.3,
-        'Campinho': 1.4,
-        'Oswaldo Cruz': 1.2,
-        'Praça Seca': 1.5,
-        'Tanque': 1.5,
-        'Outro': 1.7
-    };
-    
     // Verifica se está no horário de funcionamento
     function checkBusinessHours() {
       const now = new Date();
@@ -1873,54 +1859,10 @@
         return R * c; // Distância em km
     }
 
-    // Função para obter coordenadas do endereço (simulação)
-    function getCoordinatesFromAddress(street, neighborhood) {
-        // Esta é uma simulação - em uma aplicação real você precisaria de uma API de geocoding
-        // Aqui estou retornando coordenadas aleatórias dentro de um raio de 20km do estabelecimento
-        // para fins de demonstração
-        
-        // Usa o nome da rua e bairro como seed para gerar coordenadas consistentes
-        const seed = (street + neighborhood).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        const randomFactor = (seed % 1000) / 1000; // Fator baseado no endereço
-        
-        // Gera um ângulo aleatório baseado no endereço
-        const angle = randomFactor * 2 * Math.PI;
-        
-        // Gera uma distância aleatória baseada no endereço (entre 1km e 20km)
-        const distance = 1 + (randomFactor * 19);
-        
-        // Calcula novas coordenadas baseadas na distância e ângulo
-        const earthRadius = 6371; // km
-        const lat1 = ESTABLISHMENT_COORDS.lat * Math.PI / 180;
-        const lon1 = ESTABLISHMENT_COORDS.lng * Math.PI / 180;
-        
-        const lat2 = Math.asin(Math.sin(lat1) * Math.cos(distance/earthRadius) + 
-                     Math.cos(lat1) * Math.sin(distance/earthRadius) * Math.cos(angle));
-        const lon2 = lon1 + Math.atan2(Math.sin(angle) * Math.sin(distance/earthRadius) * Math.cos(lat1), 
-                     Math.cos(distance/earthRadius) - Math.sin(lat1) * Math.sin(lat2));
-        
-        return {
-            lat: lat2 * 180 / Math.PI,
-            lng: lon2 * 180 / Math.PI
-        };
-    }
-
-    // Função para calcular a distância real considerando rotas de carro/moto
-    function calculateRealRouteDistance(establishmentCoords, clientCoords, neighborhood) {
-        // Calcula a distância em linha reta
-        const straightDistance = calculateDistance(
-            establishmentCoords.lat, establishmentCoords.lng,
-            clientCoords.lat, clientCoords.lng
-        );
-        
-        // Obtém o multiplicador para o bairro (simulando rotas reais)
-        const multiplier = routeMultipliers[neighborhood] || routeMultipliers['Outro'];
-        
-        // Calcula a distância real considerando o multiplicador
-        const realDistance = straightDistance * multiplier;
-        
-        // Arredonda para 1 casa decimal
-        return Math.round(realDistance * 10) / 10;
+    // Função para abrir o Google Maps com a rota
+    function openGoogleMapsRoute(originLat, originLng, destLat, destLng) {
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}&travelmode=driving`;
+        window.open(googleMapsUrl, '_blank');
     }
 
     // Função para calcular a taxa de entrega baseada na distância real
@@ -1941,47 +1883,17 @@
         // Limpa o mapa anterior
         mapElement.innerHTML = '';
         
-        // Cria elementos do mapa
-        const establishmentMarker = document.createElement('div');
-        establishmentMarker.className = 'map-marker';
-        establishmentMarker.style.left = '20%';
-        establishmentMarker.style.top = '20%';
+        // Cria um iframe com o Google Maps
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.google.com/maps/embed/v1/directions?key=YOUR_API_KEY&origin=${establishmentCoords.lat},${establishmentCoords.lng}&destination=${clientCoords.lat},${clientCoords.lng}&mode=driving`;
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.style.border = '0';
+        iframe.allowFullscreen = true;
+        iframe.loading = 'lazy';
         
-        const clientMarker = document.createElement('div');
-        clientMarker.className = 'map-marker client';
-        clientMarker.style.left = '80%';
-        clientMarker.style.top = '80%';
-        
-        // Calcula ângulo para a linha de rota
-        const angle = Math.atan2(80 - 20, 80 - 20) * 180 / Math.PI;
-        const length = Math.sqrt(Math.pow(80 - 20, 2) + Math.pow(80 - 20, 2));
-        
-        const routeLine = document.createElement('div');
-        routeLine.className = 'map-route';
-        routeLine.style.width = `${length}%`;
-        routeLine.style.left = '20%';
-        routeLine.style.top = '20%';
-        routeLine.style.transform = `rotate(${angle}deg)`;
-        
-        // Adiciona rótulos
-        const establishmentLabel = document.createElement('div');
-        establishmentLabel.className = 'map-labels';
-        establishmentLabel.textContent = 'FoodTruck';
-        establishmentLabel.style.left = '25%';
-        establishmentLabel.style.top = '25%';
-        
-        const clientLabel = document.createElement('div');
-        clientLabel.className = 'map-labels';
-        clientLabel.textContent = 'Seu endereço';
-        clientLabel.style.left = '85%';
-        clientLabel.style.top = '85%';
-        
-        // Adiciona elementos ao mapa
-        mapElement.appendChild(establishmentMarker);
-        mapElement.appendChild(clientMarker);
-        mapElement.appendChild(routeLine);
-        mapElement.appendChild(establishmentLabel);
-        mapElement.appendChild(clientLabel);
+        // Adiciona o iframe ao mapa
+        mapElement.appendChild(iframe);
         
         // Atualiza informações de distância e tempo
         document.getElementById('distance-display').textContent = distance.toFixed(1);
@@ -2011,23 +1923,30 @@
         // Simula um tempo de carregamento
         setTimeout(() => {
             try {
-                // Simula a obtenção de coordenadas do endereço do cliente
-                clientCoords = getCoordinatesFromAddress(street, neighborhood);
+                // Abre o Google Maps com a rota
+                const googleMapsUrl = `https://maps.app.goo.gl/iW5VG464Bid6waMV9`;
+                window.open(googleMapsUrl, '_blank');
                 
-                // Calcula a distância real considerando rotas de carro/moto
-                distance = calculateRealRouteDistance(ESTABLISHMENT_COORDS, clientCoords, neighborhood);
+                // Pede ao usuário para inserir a distância manualmente (já que não podemos obter programaticamente sem API)
+                const userDistance = prompt('Por favor, insira a distância em km mostrada no Google Maps:');
                 
-                // Calcula a taxa de entrega
-                deliveryFee = calculateFeeByRealDistance(distance);
-                
-                // Atualiza a exibição
-                deliveryFeeElement.innerHTML = `
-                    Distância pela rota: ${distance.toFixed(1)} km<br>
-                    Taxa de entrega calculada: R$ ${deliveryFee.toFixed(2)}
-                `;
-                
-                // Renderiza o mapa com a rota
-                renderMap(ESTABLISHMENT_COORDS, clientCoords, distance);
+                if (userDistance && !isNaN(userDistance)) {
+                    distance = parseFloat(userDistance);
+                    
+                    // Calcula a taxa de entrega
+                    deliveryFee = calculateFeeByRealDistance(distance);
+                    
+                    // Atualiza a exibição
+                    deliveryFeeElement.innerHTML = `
+                        Distância pela rota: ${distance.toFixed(1)} km<br>
+                        Taxa de entrega calculada: R$ ${deliveryFee.toFixed(2)}
+                    `;
+                    
+                    // Renderiza o mapa com a rota
+                    renderMap(ESTABLISHMENT_COORDS, {lat: -22.8758, lng: -43.3619}, distance); // Coordenadas de exemplo
+                } else {
+                    alert('Distância inválida. Por favor, tente novamente.');
+                }
             } catch (e) {
                 console.error('Erro ao calcular distância:', e);
                 alert('Não foi possível calcular a distância. Por favor, verifique o endereço e tente novamente.');
@@ -2038,7 +1957,7 @@
             
             // Atualiza o total do pedido
             updateOrderTotal();
-        }, 1500); // Simula um tempo de resposta da API
+        }, 1500); // Simula um tempo de resposta
     }
 
     // Função para confirmar a taxa de entrega
