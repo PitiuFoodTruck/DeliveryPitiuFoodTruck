@@ -985,6 +985,7 @@
       position: relative;
       height: 300px;
       overflow: hidden;
+      display: none;
     }
     
     #map {
@@ -1066,6 +1067,23 @@
     
     #map-buttons button:hover {
       background-color: var(--secondary-color);
+    }
+    
+    /* Loading spinner */
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+      display: none;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     
     /* Responsividade para tablets */
@@ -1362,6 +1380,7 @@
           <input type="text" id="customer-street" placeholder="Rua" required>
           <input type="text" id="customer-number" placeholder="Número" required style="margin-top: 0.5rem;">
           <input type="text" id="customer-complement" placeholder="Complemento (apto/casa/local)" style="margin-top: 0.5rem;">
+          <input type="text" id="customer-zipcode" placeholder="CEP (opcional)" style="margin-top: 0.5rem;">
           <input type="text" id="customer-neighborhood" placeholder="Bairro" required style="margin-top: 0.5rem;">
           <button type="button" onclick="calculateDeliveryFeeByAddress()" style="margin-top: 0.5rem; padding: 0.7rem; background-color: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%;">
             Calcular Taxa de Entrega
@@ -1372,7 +1391,7 @@
           Taxa de entrega: R$ 0,00
         </div>
         
-        <div id="map-container" style="display: none;">
+        <div id="map-container">
           <div id="map">
             <!-- Mapa será renderizado aqui -->
           </div>
@@ -1384,6 +1403,7 @@
             <button type="button" onclick="confirmDeliveryFee()">Confirmar Taxa</button>
             <button type="button" onclick="recalculateDeliveryFee()">Recalcular</button>
           </div>
+          <div class="loader" id="map-loader"></div>
         </div>
         
         <div class="form-group">
@@ -1520,6 +1540,20 @@
       { name: "Trocar pão tradicional por pão de queijo", price: 4.00 },
       { name: "Não incluir nada", price: 0.00 }
     ];
+    
+    // Tabela de multiplicadores para rotas realistas por bairro
+    const routeMultipliers = {
+        'Vila Valqueire': 1.0,
+        'Cascadura': 1.3,
+        'Madureira': 1.4,
+        'Marechal Hermes': 1.2,
+        'Bento Ribeiro': 1.3,
+        'Campinho': 1.4,
+        'Oswaldo Cruz': 1.2,
+        'Praça Seca': 1.5,
+        'Tanque': 1.5,
+        'Outro': 1.7
+    };
     
     // Verifica se está no horário de funcionamento
     function checkBusinessHours() {
@@ -1871,8 +1905,26 @@
         };
     }
 
-    // Função para calcular a taxa de entrega baseada na distância
-    function calculateFeeByDistance(distance) {
+    // Função para calcular a distância real considerando rotas de carro/moto
+    function calculateRealRouteDistance(establishmentCoords, clientCoords, neighborhood) {
+        // Calcula a distância em linha reta
+        const straightDistance = calculateDistance(
+            establishmentCoords.lat, establishmentCoords.lng,
+            clientCoords.lat, clientCoords.lng
+        );
+        
+        // Obtém o multiplicador para o bairro (simulando rotas reais)
+        const multiplier = routeMultipliers[neighborhood] || routeMultipliers['Outro'];
+        
+        // Calcula a distância real considerando o multiplicador
+        const realDistance = straightDistance * multiplier;
+        
+        // Arredonda para 1 casa decimal
+        return Math.round(realDistance * 10) / 10;
+    }
+
+    // Função para calcular a taxa de entrega baseada na distância real
+    function calculateFeeByRealDistance(distance) {
         if (distance <= 2) return 5;
         if (distance <= 5) return 8;
         if (distance <= 10) return 12;
@@ -1944,43 +1996,49 @@
         const street = document.getElementById('customer-street').value;
         const neighborhood = document.getElementById('customer-neighborhood').value;
         const deliveryFeeElement = document.getElementById('delivery-fee');
+        const loader = document.getElementById('map-loader');
         
         if (!street || !neighborhood) {
             alert('Por favor, preencha pelo menos a rua e o bairro');
             return;
         }
         
-        try {
-            // Simula a obtenção de coordenadas do endereço do cliente
-            clientCoords = getCoordinatesFromAddress(street, neighborhood);
-            
-            // Calcula a distância
-            distance = calculateDistance(
-                ESTABLISHMENT_COORDS.lat, ESTABLISHMENT_COORDS.lng,
-                clientCoords.lat, clientCoords.lng
-            );
-            
-            // Arredonda para 1 casa decimal
-            distance = Math.round(distance * 10) / 10;
-            
-            // Calcula a taxa de entrega
-            deliveryFee = calculateFeeByDistance(distance);
-            
-            // Atualiza a exibição
-            deliveryFeeElement.innerHTML = `
-                Distância estimada: ${distance.toFixed(1)} km<br>
-                Taxa de entrega calculada: R$ ${deliveryFee.toFixed(2)}
-            `;
-            
-            // Renderiza o mapa com a rota
-            renderMap(ESTABLISHMENT_COORDS, clientCoords, distance);
-        } catch (e) {
-            console.error('Erro ao calcular distância:', e);
-            alert('Não foi possível calcular a distância. Por favor, verifique o endereço e tente novamente.');
-        }
+        // Mostra o loader
+        loader.style.display = 'block';
+        deliveryFeeElement.innerHTML = 'Calculando rota...';
+        document.getElementById('map-container').style.display = 'none';
         
-        // Atualiza o total do pedido
-        updateOrderTotal();
+        // Simula um tempo de carregamento
+        setTimeout(() => {
+            try {
+                // Simula a obtenção de coordenadas do endereço do cliente
+                clientCoords = getCoordinatesFromAddress(street, neighborhood);
+                
+                // Calcula a distância real considerando rotas de carro/moto
+                distance = calculateRealRouteDistance(ESTABLISHMENT_COORDS, clientCoords, neighborhood);
+                
+                // Calcula a taxa de entrega
+                deliveryFee = calculateFeeByRealDistance(distance);
+                
+                // Atualiza a exibição
+                deliveryFeeElement.innerHTML = `
+                    Distância pela rota: ${distance.toFixed(1)} km<br>
+                    Taxa de entrega calculada: R$ ${deliveryFee.toFixed(2)}
+                `;
+                
+                // Renderiza o mapa com a rota
+                renderMap(ESTABLISHMENT_COORDS, clientCoords, distance);
+            } catch (e) {
+                console.error('Erro ao calcular distância:', e);
+                alert('Não foi possível calcular a distância. Por favor, verifique o endereço e tente novamente.');
+            } finally {
+                // Esconde o loader
+                loader.style.display = 'none';
+            }
+            
+            // Atualiza o total do pedido
+            updateOrderTotal();
+        }, 1500); // Simula um tempo de resposta da API
     }
 
     // Função para confirmar a taxa de entrega
@@ -2230,7 +2288,7 @@
         if (complement) message += ` - ${complement}`;
         message += `\n${neighborhood}\n`;
         if (zipcode) message += `CEP: ${zipcode}\n`;
-        message += `\n*Distância:* ${distance.toFixed(1)} km\n`;
+        message += `\n*Distância pela rota:* ${distance.toFixed(1)} km\n`;
         message += `*Taxa de entrega:* R$ ${deliveryFee.toFixed(2)}\n\n`;
       } else if (deliveryOption === 'retirada') {
         message += `*Tipo:* Retirada\n\n`;
